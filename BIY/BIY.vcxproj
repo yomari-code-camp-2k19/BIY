@@ -147,15 +147,23 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="glad\glad.c" />
+    <ClCompile Include="glShader.cpp" />
+    <ClCompile Include="glTexture.cpp" />
     <ClCompile Include="imgui\imgui.cpp" />
     <ClCompile Include="imgui\imgui_demo.cpp" />
     <ClCompile Include="imgui\imgui_draw.cpp" />
     <ClCompile Include="imgui\imgui_impl_glfw.cpp" />
     <ClCompile Include="imgui\imgui_impl_opengl3.cpp" />
     <ClCompile Include="imgui\imgui_widgets.cpp" />
+    <ClCompile Include="LibsImplementation.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="renderer2d.cpp" />
+    <ClCompile Include="resourceManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="common\Core.h" />
+    <ClInclude Include="glShader.h" />
+    <ClInclude Include="glTexture.h" />
     <ClInclude Include="imgui\imconfig.h" />
     <ClInclude Include="imgui\imgui.h" />
     <ClInclude Include="imgui\imgui_impl_glfw.h" />
@@ -164,6 +172,18 @@
     <ClInclude Include="imgui\imstb_rectpack.h" />
     <ClInclude Include="imgui\imstb_textedit.h" />
     <ClInclude Include="imgui\imstb_truetype.h" />
+    <ClInclude Include="math\Color.h" />
+    <ClInclude Include="math\Math.h" />
+    <ClInclude Include="math\Matrix4.h" />
+    <ClInclude Include="math\Quaterniod.h" />
+    <ClInclude Include="renderer2d.h" />
+    <ClInclude Include="resourceManager.h" />
+    <ClInclude Include="Application.h" />
+    <ClInclude Include="Components.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="shaders\fshader.frag" />
+    <None Include="shaders\vshader.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
