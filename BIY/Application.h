@@ -44,6 +44,14 @@ private:
 
 	void SetComponents();
 	void CurrentSelectedComponent();
+
+	void MotherBoardDataDisplay(motherboard& m);
+	void ProcessorDataDisplay(cpu& m);
+	void VideoCardDataDisplay(videoCard& m);
+	void PowerSupplyDataDisplay(powerSupply& m);
+	void CaseDataDisplay(casing& m);
+	void MemoryDataDisplay(memory& m);
+	void StorageDataDisplay(storage& m);
 public:
 	void Init();
 	void Update();
@@ -55,6 +63,26 @@ const char* Application::s_ComponentNames[Application::pc_components::cTotal - 1
 {
 	"Motherboard", "Processor", "Memory", "Cooler", "Storage", "Video Card", "Power Supply", "Case"
 };
+
+void Application::MotherBoardDataDisplay(motherboard& m) {
+	ImGui::BulletText("Socket: %s", m.socket.c_str());
+	ImGui::BulletText("Form Factor: %s", m.formFactor.c_str());
+	ImGui::BulletText("Ram Slot: %u", m.ramSlot);
+	ImGui::BulletText("Max Ram Suported: %u", m.maxRam);
+	ImGui::BulletText("Average Rate: %.2f", m.maxRam);
+	ImGui::BulletText("Average Price: NPRs.%.2f", m.price * 114.72);
+}
+
+void Application::MemoryDataDisplay(memory& m)
+{
+	ImGui::BulletText("Speed: %s", m.speed.c_str());
+	ImGui::BulletText("Type: %s", m.type.c_str());
+	ImGui::BulletText("CAS: %i", m.cas);
+	ImGui::BulletText("Mod X Each Mod: %u X %u", m.numModule, m.eachModule);
+	ImGui::BulletText("Size: %u", m.size);
+	ImGui::BulletText("Average Rating: %.2f", m.avgRating);
+	ImGui::BulletText("Average Price: NPRs.%.2f", m.Price * 114.72);
+}
 
 void Application::SetComponents()
 {
@@ -101,6 +129,7 @@ void Application::SetComponents()
 
 inline void Application::CurrentSelectedComponent()
 {
+
 	static i32 currentOpen = -1;
 	ImGui::Begin(s_ComponentNames[m_SelectedCompenent - 1]);
 	switch (m_SelectedCompenent)
@@ -119,12 +148,13 @@ inline void Application::CurrentSelectedComponent()
 			}
 			if (currentOpen == i)
 			{
-				ImGui::BulletText("Socket: %s", m.socket.c_str());
+				MotherBoardDataDisplay(m);
+				/*ImGui::BulletText("Socket: %s", m.socket.c_str());
 				ImGui::BulletText("Form Factor: %s", m.formFactor.c_str());
 				ImGui::BulletText("Ram Slot: %u", m.ramSlot);
 				ImGui::BulletText("Max Ram Suported: %u", m.maxRam);
 				ImGui::BulletText("Average Rate: %.2f", m.maxRam);
-				ImGui::BulletText("Average Price: NPRs.%.2f", m.price * 114.72);
+				ImGui::BulletText("Average Price: NPRs.%.2f", m.price * 114.72);*/
 				bool used = (m_UsedMotherBoard==i);
 				ImGui::Checkbox("Use", &used);
 				if (used) m_UsedMotherBoard = i;
@@ -172,13 +202,14 @@ inline void Application::CurrentSelectedComponent()
 			}
 			if (currentOpen == i)
 			{
-				ImGui::BulletText("Speed: %s", m.speed.c_str());
+				MemoryDataDisplay(m)
+				/*ImGui::BulletText("Speed: %s", m.speed.c_str());
 				ImGui::BulletText("Type: %s", m.type.c_str());
 				ImGui::BulletText("CAS: %i", m.cas);
 				ImGui::BulletText("Mod X Each Mod: %u X %u", m.numModule, m.eachModule);
 				ImGui::BulletText("Size: %u", m.size);
 				ImGui::BulletText("Average Rating: %.2f", m.avgRating);
-				ImGui::BulletText("Average Price: NPRs.%.2f", m.Price * 114.72);
+				ImGui::BulletText("Average Price: NPRs.%.2f", m.Price * 114.72);*/
 				bool used = (m_UsedMemory == i);
 				ImGui::Checkbox("Use", &used);
 				if (used) m_UsedMemory = i;
@@ -369,3 +400,4 @@ void Application::Render()
 {
 	m_Renderer->DrawSprite(ResourceManager::GetTexture("smile"), v2{ 200, 200 }, v2{ 300, 400 }, 45.0f, v3{ 0.0f, 1.0f, 0.0f });
 }
+
