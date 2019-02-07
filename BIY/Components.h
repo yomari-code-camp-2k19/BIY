@@ -10,6 +10,8 @@ struct cpu {
 	unsigned int power;
 	float avgRate;
 	float price;
+	int minVer;
+	int maxVer;
 };
 
 struct motherboard {
@@ -20,6 +22,8 @@ struct motherboard {
 	unsigned int maxRam;
 	float avgRate;
 	float price;
+	int minVer;
+	int maxVer;
 };
 
 struct cpuCooler {
@@ -29,6 +33,8 @@ struct cpuCooler {
 	unsigned int noiseLevel;
 	float avgRate;
 	float price;
+	int minVer;
+	int maxVer;
 };
 
 struct memory {
@@ -37,6 +43,8 @@ struct memory {
 	unsigned int numModule, eachModule, size;
 	float avgRating;
 	float price;
+	int minVer;
+	int maxVer;
 };
 
 struct storage {
@@ -45,6 +53,8 @@ struct storage {
 	unsigned int cache;
 	float avgRate;
 	float price;
+	int minVer;
+	int maxVer;
 };
 
 struct videoCard {
@@ -53,6 +63,8 @@ struct videoCard {
 	float ClkCore;
 	float avgRate;
 	float price;
+	int minVer;
+	int maxVer;
 };
 
 struct powerSupply {
@@ -61,9 +73,13 @@ struct powerSupply {
 	std::string modular;
 	float avgRate;
 	float price;
+	int minVer;
+	int maxVer;
 };
 
 struct casing {
 	std::string name, type;
 	float price;
+	int minVer;
+	int maxVer;
 };
