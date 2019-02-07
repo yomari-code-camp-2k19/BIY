@@ -28,9 +28,11 @@ int main(int, char**)
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 
 
-	GLFWwindow* window = glfwCreateWindow(1280, 720, "BIY", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(1280, 720, "BIY-PC (Build it Yourself - PC)", NULL, NULL);
 	if (window == NULL)
 		return 1;
+
+	glfwMaximizeWindow(window);
 
 	glfwMakeContextCurrent(window);
 	glfwSwapInterval(1); // Enable vsync
@@ -46,8 +48,7 @@ int main(int, char**)
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
 
-	ImGui::StyleColorsDark();
-	ImGui::StyleColorsClassic();
+	ImGui::StyleColorsLight();
 
 	ImGui_ImplGlfw_InitForOpenGL(window, true);
 	ImGui_ImplOpenGL3_Init(glsl_version);

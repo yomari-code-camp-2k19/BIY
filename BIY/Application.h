@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Components.h"
+#include <algorithm>
 
 struct configuration
 {
@@ -53,6 +54,9 @@ private:
 	i32 m_UsedVideoCard;
 	i32 m_UsedPowerSupply;
 	i32 m_UsedCase;
+
+	f32 m_UserPrice;
+	f32 m_LeftPrice;
 
 	static const char* s_ComponentNames[pc_components::cTotal - 1];
 
@@ -208,10 +212,20 @@ void Application::SetComponents()
 	m_UsedVideoCard = -1;
 	m_UsedPowerSupply = -1;
 	m_UsedCase = -1;
+
+#define SORT_ORDER() [](auto& a, auto& b) { return a.price < b.price; }
+	std::sort(vMotherboard.begin(), vMotherboard.end(), SORT_ORDER());
+	std::sort(vCpu.begin(), vCpu.end(), SORT_ORDER());
+	std::sort(vMemory.begin(), vMemory.end(), SORT_ORDER());
+	std::sort(vCpuCooler.begin(), vCpuCooler.end(), SORT_ORDER());
+	std::sort(vStorage.begin(), vStorage.end(), SORT_ORDER());
+	std::sort(vVideoCard.begin(), vVideoCard.end(), SORT_ORDER());
+	std::sort(vPowerSupply.begin(), vPowerSupply.end(), SORT_ORDER());
+	std::sort(vCase.begin(), vCase.end(), SORT_ORDER());
 }
 
 #define DISPLAY_CBUTTON(m) \
-if (ImGui::Button(m.name.c_str(), ImVec2(200.0f, 30.0f))) \
+if (ImGui::Button(m.name.c_str(), ImVec2(250.0f, 30.0f))) \
 { \
 	if (currentOpen == i) \
 		currentOpen = 0; \
@@ -221,7 +235,6 @@ if (ImGui::Button(m.name.c_str(), ImVec2(200.0f, 30.0f))) \
 
 inline void Application::CurrentMenuSelection()
 {
-
 	static i32 currentOpen = -1;
 	ImGui::Begin(s_ComponentNames[m_SelectedCompenent - 1]);
 	switch (m_SelectedCompenent)
@@ -231,6 +244,7 @@ inline void Application::CurrentMenuSelection()
 		for (int i=0; i<vMotherboard.size(); ++i)
 		{
 			auto& m = vMotherboard[i];
+			if (m_LeftPrice < m.price * 114.72f) continue;
 			DISPLAY_CBUTTON(m);
 			if (currentOpen == i)
 			{
@@ -247,6 +261,7 @@ inline void Application::CurrentMenuSelection()
 		for (int i = 0; i < (i32)vCpu.size(); ++i)
 		{
 			auto& m = vCpu[i];
+			if (m_LeftPrice < m.price * 114.72f) continue;
 			DISPLAY_CBUTTON(m);
 			if (currentOpen == i)
 			{
@@ -263,6 +278,7 @@ inline void Application::CurrentMenuSelection()
 		for (int i = 0; i < vMemory.size(); ++i)
 		{
 			auto& m = vMemory[i];
+			if (m_LeftPrice < m.price * 114.72f) continue;
 			DISPLAY_CBUTTON(m);
 			if (currentOpen == i)
 			{
@@ -279,6 +295,7 @@ inline void Application::CurrentMenuSelection()
 		for (int i = 0; i < vCpuCooler.size(); ++i)
 		{
 			auto& m = vCpuCooler[i];
+			if (m_LeftPrice < m.price * 114.72f) continue;
 			DISPLAY_CBUTTON(m);
 			if (currentOpen == i)
 			{
@@ -295,6 +312,7 @@ inline void Application::CurrentMenuSelection()
 		for (int i = 0; i < vStorage.size(); ++i)
 		{
 			auto& m = vStorage[i];
+			if (m_LeftPrice < m.price * 114.72f) continue;
 			DISPLAY_CBUTTON(m);
 			if (currentOpen == i)
 			{
@@ -311,6 +329,7 @@ inline void Application::CurrentMenuSelection()
 		for (int i = 0; i < vVideoCard.size(); ++i)
 		{
 			auto& m = vVideoCard[i];
+			if (m_LeftPrice < m.price * 114.72f) continue;
 			DISPLAY_CBUTTON(m);
 			if (currentOpen == i)
 			{
@@ -327,6 +346,7 @@ inline void Application::CurrentMenuSelection()
 		for (int i = 0; i < vPowerSupply.size(); ++i)
 		{
 			auto& m = vPowerSupply[i];
+			if (m_LeftPrice < m.price * 114.72f) continue;
 			DISPLAY_CBUTTON(m);
 			if (currentOpen == i)
 			{
@@ -343,6 +363,7 @@ inline void Application::CurrentMenuSelection()
 		for (int i = 0; i < vCase.size(); ++i)
 		{
 			auto& m = vCase[i];
+			if (m_LeftPrice < m.price * 114.72f) continue;
 			DISPLAY_CBUTTON(m);
 			if (currentOpen == i)
 			{
@@ -402,16 +423,21 @@ void Application::UserConfiguration()
 	static i32 currentOpen = 0;
 
 	ImGui::Begin("Selected Components");
+
+	ImGui::Text("Say your price: ");
+	ImGui::SameLine();
+	ImGui::InputFloat(" ", &m_UserPrice);
+
 	int numOfComponents = 0;
 	f32 totalPrice = 0.0f;
-	ImVec4 color(1.0f, 0.4f, 0.0f, 1.0f);
+	ImVec4 color(1.0f, 0.0f, 0.0f, 1.0f);
 
 	if (m_Configuration.pMotherBoard)
 	{
 		numOfComponents++;
 		auto i = Application::cMotherboard;
 		auto& m = *m_Configuration.pMotherBoard;
-		ImGui::TextColored(color, "Motherboard");
+		ImGui::TextColored(color, "%-20s", "Motherboard");
 		ImGui::SameLine();
 		DISPLAY_CBUTTON(m);
 		if (currentOpen == i)
@@ -424,7 +450,8 @@ void Application::UserConfiguration()
 		numOfComponents++;
 		auto i = Application::cProcessor;
 		auto& m = *m_Configuration.pCpu;
-		ImGui::TextColored(color, "Processor");
+		ImGui::TextColored(color, "%-20s", "Processor");
+		ImGui::SameLine();
 		DISPLAY_CBUTTON(m);
 		if (currentOpen == i)
 			ProcessorDataDisplay(m);
@@ -436,7 +463,8 @@ void Application::UserConfiguration()
 		numOfComponents++;
 		auto i = Application::cMemory;
 		auto& m = *m_Configuration.pMemory;
-		ImGui::TextColored(color, "Memory");
+		ImGui::TextColored(color, "%-20s", "Memory");
+		ImGui::SameLine();
 		DISPLAY_CBUTTON(m);
 		if (currentOpen == i)
 			MemoryDataDisplay(m);
@@ -448,7 +476,8 @@ void Application::UserConfiguration()
 		numOfComponents++;
 		auto i = Application::cCooler;
 		auto& m = *m_Configuration.pCpuCooler;
-		ImGui::TextColored(color, "CPU Cooler");
+		ImGui::TextColored(color, "%-20s", "CPU Cooler");
+		ImGui::SameLine();
 		DISPLAY_CBUTTON(m);
 		if (currentOpen == i)
 			CPUCoolerDataDisplay(m);
@@ -460,7 +489,8 @@ void Application::UserConfiguration()
 		numOfComponents++;
 		auto i = Application::cStorage;
 		auto& m = *m_Configuration.pStorage;
-		ImGui::TextColored(color, "Storage");
+		ImGui::TextColored(color, "%-20s", "Storage");
+		ImGui::SameLine();
 		DISPLAY_CBUTTON(m);
 		if (currentOpen == i)
 			StorageDataDisplay(m);
@@ -472,7 +502,8 @@ void Application::UserConfiguration()
 		numOfComponents++;
 		auto i = Application::cVideoCard;
 		auto& m = *m_Configuration.pVideoCard;
-		ImGui::TextColored(color, "Video Card");
+		ImGui::TextColored(color, "%-20s", "Video Card");
+		ImGui::SameLine();
 		DISPLAY_CBUTTON(m);
 		if (currentOpen == i)
 			VideoCardDataDisplay(m);
@@ -484,7 +515,8 @@ void Application::UserConfiguration()
 		numOfComponents++;
 		auto i = Application::cPowerSupply;
 		auto& m = *m_Configuration.pPowerSupply;
-		ImGui::TextColored(color, "Power Supply");
+		ImGui::TextColored(color, "%-20s", "Power Supply");
+		ImGui::SameLine();
 		DISPLAY_CBUTTON(m);
 		if (currentOpen == i)
 			PowerSupplyDataDisplay(m);
@@ -496,15 +528,21 @@ void Application::UserConfiguration()
 		numOfComponents++;
 		auto i = Application::cCase;
 		auto& m = *m_Configuration.pCase;
-		ImGui::TextColored(color, "Case");
+		ImGui::TextColored(color, "%-20s", "Case");
+		ImGui::SameLine();
 		DISPLAY_CBUTTON(m);
 		if (currentOpen == i)
 			CaseDataDisplay(m);
 		totalPrice += m.price;
 	}
 
+	m_LeftPrice = m_UserPrice - totalPrice * 144.720f;
+	if (m_UserPrice == 0.0f) m_LeftPrice = INFINITY;
+	if (m_LeftPrice < 0.0f) m_LeftPrice = 0.0f;
+
 	ImGui::TextColored(color, "Total number of compenents: %d", numOfComponents);
 	ImGui::TextColored(color, "Total Price: %.2f", totalPrice * 114.720f);
+	ImGui::TextColored(color, "Left Price: %.2f", m_LeftPrice);
 	ImGui::End();
 }
 
@@ -529,7 +567,10 @@ void Application::Init()
 	// Set render-specific controls
 	m_Renderer = new Renderer2D(ResourceManager::GetShader("sprite"));
 
-	m_SelectedCompenent = cNone;
+	m_UserPrice = 0.0f;
+	m_LeftPrice = 0.0f;
+
+	m_SelectedCompenent = cMotherboard;
 	SetComponents();
 }
 
@@ -556,8 +597,7 @@ void Application::ImGUIFrame()
 	if (ImGui::Button("Power Supply", size)) m_SelectedCompenent = cPowerSupply;
 	if (ImGui::Button("Video Card", size)) m_SelectedCompenent = cVideoCard;
 	ImGui::End();
-	if (m_SelectedCompenent)
-		CurrentMenuSelection();
+	CurrentMenuSelection();
 	UserConfiguration();
 }
 
