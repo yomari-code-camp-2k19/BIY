@@ -10,6 +10,7 @@ struct cpu {
 	unsigned int power;
 	float avgRate;
 	float price;
+	std::string socket, vendor;
 };
 
 struct motherboard {
@@ -20,6 +21,8 @@ struct motherboard {
 	unsigned int maxRam;
 	float avgRate;
 	float price;
+	std::string vendor;
+	flaot volume;
 };
 
 struct cpuCooler {
@@ -66,4 +69,5 @@ struct powerSupply {
 struct casing {
 	std::string name, type;
 	float price;
+	float volume;
 };
