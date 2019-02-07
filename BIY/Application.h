@@ -73,6 +73,42 @@ private:
 
 	void CurrentMenuSelection();
 	void UserConfiguration();
+
+	bool IsCompatible(cpu& a, motherboard& b);
+	bool IsCompatible(cpu& a, cpuCooler& b);
+	bool IsCompatible(cpu& a, memory& b);
+	bool IsCompatible(cpu& a, storage& b);
+	bool IsCompatible(cpu& a, videoCard& b);
+	bool IsCompatible(cpu& a, powerSupply& b);
+	bool IsCompatible(cpu& a, casing& b);
+
+	bool IsCompatible(motherboard& a, cpuCooler& b);
+	bool IsCompatible(motherboard& a, memory& b);
+	bool IsCompatible(motherboard& a, storage& b);
+	bool IsCompatible(motherboard& a, videoCard& b);
+	bool IsCompatible(motherboard& a, powerSupply& b);
+	bool IsCompatible(motherboard& a, casing& b);
+
+	bool IsCompatible(cpuCooler& a, memory& b);
+	bool IsCompatible(cpuCooler& a, storage& b);
+	bool IsCompatible(cpuCooler& a, videoCard& b);
+	bool IsCompatible(cpuCooler& a, powerSupply& b);
+	bool IsCompatible(cpuCooler& a, casing& b);
+
+	bool IsCompatible(memory& a, storage& b);
+	bool IsCompatible(memory& a, videoCard& b);
+	bool IsCompatible(memory& a, powerSupply& b);
+	bool IsCompatible(memory& a, casing& b);
+
+	bool IsCompatible(storage& a, videoCard& b);
+	bool IsCompatible(storage& a, powerSupply& b);
+	bool IsCompatible(storage& a, casing& b);
+
+	bool IsCompatible(videoCard& a, powerSupply& b);
+	bool IsCompatible(videoCard& a, casing& b);
+
+	bool IsCompatible(powerSupply& a, casing& b);
+
 public:
 	void Init(Renderer2D* renderer);
 	void Update();
