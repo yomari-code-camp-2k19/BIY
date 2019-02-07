@@ -36,7 +36,7 @@ struct memory {
 	int cas;
 	unsigned int numModule, eachModule, size;
 	float avgRating;
-	float Price;
+	float price;
 };
 
 struct storage {
@@ -52,7 +52,7 @@ struct videoCard {
 	unsigned int memory;
 	float ClkCore;
 	float avgRate;
-	float Price;
+	float price;
 };
 
 struct powerSupply {

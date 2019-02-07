@@ -12,7 +12,7 @@ Renderer2D::~Renderer2D()
 	a3GL(glDeleteVertexArrays(1, &this->quadVAO));
 }
 
-void Renderer2D::DrawSprite(Texture2D &texture, v2 position, v2 size, GLfloat rotate, v3 color)
+void Renderer2D::Draw(Texture2D &texture, v2 position, v2 size, GLfloat rotate, v3 color)
 {
 	// Prepare transformations
 	this->shader.Use();
