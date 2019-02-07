@@ -373,7 +373,7 @@ inline void Application::CurrentMenuSelection()
 				StorageDataDisplay(m);
 				bool used = (m_UsedStorage == i);
 				ImGui::Checkbox("Use", &used);
-				if (used) m_UsedStorage = i;  else {
+				if (used) m_UsedStorage = i; else {
 					if (m_UsedStorage == i)
 						m_UsedStorage = -1;
 				}
@@ -624,6 +624,149 @@ void Application::UserConfiguration()
 	ImGui::End();
 }
 
+inline bool Application::IsCompatible(cpu & a, motherboard & b)
+{
+	//if (a.socket == b.socket && a.vendor == b.vendor) return true;
+	return false;
+}
+
+inline bool Application::IsCompatible(cpu & a, cpuCooler & b)
+{
+	return true;
+}
+
+inline bool Application::IsCompatible(cpu & a, memory & b)
+{
+	return true;
+}
+
+inline bool Application::IsCompatible(cpu & a, storage & b)
+{
+	return true;
+}
+
+inline bool Application::IsCompatible(cpu & a, videoCard & b)
+{
+	return true;
+}
+
+inline bool Application::IsCompatible(cpu & a, powerSupply & b)
+{
+	return true;
+}
+
+inline bool Application::IsCompatible(cpu & a, casing & b)
+{
+	return true;
+}
+
+inline bool Application::IsCompatible(motherboard & a, cpuCooler & b)
+{
+	return true;
+}
+
+inline bool Application::IsCompatible(motherboard & a, memory & b)
+{
+	if (a.maxRam < b.size) return true;
+	return false;
+}
+
+inline bool Application::IsCompatible(motherboard & a, storage & b)
+{
+	return true;
+}
+
+inline bool Application::IsCompatible(motherboard & a, videoCard & b)
+{
+	return true;
+}
+
+inline bool Application::IsCompatible(motherboard & a, powerSupply & b)
+{
+	return true;
+}
+
+inline bool Application::IsCompatible(motherboard & a, casing & b)
+{
+	//if (a.volume > b.volume) return false;
+	return true;
+}
+
+inline bool Application::IsCompatible(cpuCooler & a, memory & b)
+{
+	return true;
+}
+
+inline bool Application::IsCompatible(cpuCooler & a, storage & b)
+{
+	return true;
+}
+
+inline bool Application::IsCompatible(cpuCooler & a, videoCard & b)
+{
+	return true;
+}
+
+inline bool Application::IsCompatible(cpuCooler & a, powerSupply & b)
+{
+	return true;
+}
+
+inline bool Application::IsCompatible(cpuCooler & a, casing & b)
+{
+	return true;
+}
+
+inline bool Application::IsCompatible(memory & a, storage & b)
+{
+	return true;
+}
+
+inline bool Application::IsCompatible(memory & a, videoCard & b)
+{
+	return true;
+}
+
+inline bool Application::IsCompatible(memory & a, powerSupply & b)
+{
+	return true;
+}
+
+inline bool Application::IsCompatible(memory & a, casing & b)
+{
+	return true;
+}
+
+inline bool Application::IsCompatible(storage & a, videoCard & b)
+{
+	return true;
+}
+
+inline bool Application::IsCompatible(storage & a, powerSupply & b)
+{
+	return true;
+}
+
+inline bool Application::IsCompatible(storage & a, casing & b)
+{
+	return true;
+}
+
+inline bool Application::IsCompatible(videoCard & a, powerSupply & b)
+{
+	return true;
+}
+
+inline bool Application::IsCompatible(videoCard & a, casing & b)
+{
+	return true;
+}
+
+inline bool Application::IsCompatible(powerSupply & a, casing & b)
+{
+	return true;
+}
+
 void Application::Init(Renderer2D* renderer)
 {
 	// Load textures
@@ -647,7 +790,259 @@ void Application::Init(Renderer2D* renderer)
 
 void Application::Update()
 {
+	m_CompatibilityStatus = true;
+	if (m_Configuration.pCpu && m_Configuration.pMotherBoard)
+	{
+		if (!IsCompatible(*m_Configuration.pCpu, *m_Configuration.pMotherBoard))
+		{
+			m_CompabilityMsg = "CPU and Motherboard not compatible";
+			m_CompatibilityStatus = false;
+		}
+	}
 
+	if (m_Configuration.pCpu && m_Configuration.pCpuCooler)
+	{
+		if (!IsCompatible(*m_Configuration.pCpu, *m_Configuration.pCpuCooler))
+		{
+			m_CompabilityMsg = "CPU and CPU Cooler not compatible";
+			m_CompatibilityStatus = false;
+		}
+	}
+
+	if (m_Configuration.pCpu && m_Configuration.pMemory)
+	{
+		if (!IsCompatible(*m_Configuration.pCpu, *m_Configuration.pMemory))
+		{
+			m_CompabilityMsg = "CPU and Memory not compatible";
+			m_CompatibilityStatus = false;
+		}
+	}
+
+	if (m_Configuration.pCpu && m_Configuration.pStorage)
+	{
+		if (!IsCompatible(*m_Configuration.pCpu, *m_Configuration.pStorage))
+		{
+			m_CompabilityMsg = "CPU and Storage not compatible";
+			m_CompatibilityStatus = false;
+		}
+	}
+
+	if (m_Configuration.pCpu && m_Configuration.pVideoCard)
+	{
+		if (!IsCompatible(*m_Configuration.pCpu, *m_Configuration.pVideoCard))
+		{
+			m_CompabilityMsg = "CPU and Video Card not compatible";
+			m_CompatibilityStatus = false;
+		}
+	}
+
+	if (m_Configuration.pCpu && m_Configuration.pPowerSupply)
+	{
+		if (!IsCompatible(*m_Configuration.pCpu, *m_Configuration.pPowerSupply))
+		{
+			m_CompabilityMsg = "CPU and Powersupply not compatible";
+			m_CompatibilityStatus = false;
+		}
+	}
+
+	if (m_Configuration.pCpu && m_Configuration.pCase)
+	{
+		if (!IsCompatible(*m_Configuration.pCpu, *m_Configuration.pCase))
+		{
+			m_CompabilityMsg = "CPU and Casing not compatible";
+			m_CompatibilityStatus = false;
+		}
+	}
+
+	if (m_Configuration.pMotherBoard && m_Configuration.pCpuCooler)
+	{
+		if (!IsCompatible(*m_Configuration.pMotherBoard, *m_Configuration.pCpuCooler))
+		{
+			m_CompabilityMsg = "Motherboard and CPU Cooler not compatible";
+			m_CompatibilityStatus = false;
+		}
+	}
+
+	if (m_Configuration.pMotherBoard && m_Configuration.pMemory)
+	{
+		if (!IsCompatible(*m_Configuration.pMotherBoard, *m_Configuration.pMemory))
+		{
+			m_CompabilityMsg = "Motherboard and Memory not compatible";
+			m_CompatibilityStatus = false;
+		}
+	}
+
+	if (m_Configuration.pMotherBoard && m_Configuration.pStorage)
+	{
+		if (!IsCompatible(*m_Configuration.pMotherBoard, *m_Configuration.pStorage))
+		{
+			m_CompabilityMsg = "Motherboard and Storage not compatible";
+			m_CompatibilityStatus = false;
+		}
+	}
+
+	if (m_Configuration.pMotherBoard && m_Configuration.pVideoCard)
+	{
+		if (!IsCompatible(*m_Configuration.pMotherBoard, *m_Configuration.pVideoCard))
+		{
+			m_CompabilityMsg = "Motherboard and Video card not compatible";
+			m_CompatibilityStatus = false;
+		}
+	}
+
+	if (m_Configuration.pMotherBoard && m_Configuration.pPowerSupply)
+	{
+		if (!IsCompatible(*m_Configuration.pMotherBoard, *m_Configuration.pPowerSupply))
+		{
+			m_CompabilityMsg = "Motherboard and Powersupply not compatible";
+			m_CompatibilityStatus = false;
+		}
+	}
+
+	if (m_Configuration.pMotherBoard && m_Configuration.pCase)
+	{
+		if (!IsCompatible(*m_Configuration.pMotherBoard, *m_Configuration.pCase))
+		{
+			m_CompabilityMsg = "Motherboard and Case not compatible";
+			m_CompatibilityStatus = false;
+		}
+	}
+
+	if (m_Configuration.pCpuCooler && m_Configuration.pMemory)
+	{
+		if (!IsCompatible(*m_Configuration.pCpuCooler, *m_Configuration.pMemory))
+		{
+			m_CompabilityMsg = "CPU and Memory not compatible";
+			m_CompatibilityStatus = false;
+		}
+	}
+
+	if (m_Configuration.pCpuCooler && m_Configuration.pStorage)
+	{
+		if (!IsCompatible(*m_Configuration.pCpuCooler, *m_Configuration.pStorage))
+		{
+			m_CompabilityMsg = "CPU and Storage not compatible";
+			m_CompatibilityStatus = false;
+		}
+	}
+
+	if (m_Configuration.pCpuCooler && m_Configuration.pVideoCard)
+	{
+		if (!IsCompatible(*m_Configuration.pCpuCooler, *m_Configuration.pVideoCard))
+		{
+			m_CompabilityMsg = "CPU and Video Card not compatible";
+			m_CompatibilityStatus = false;
+		}
+	}
+
+
+	if (m_Configuration.pCpuCooler && m_Configuration.pPowerSupply)
+	{
+		if (!IsCompatible(*m_Configuration.pCpuCooler, *m_Configuration.pPowerSupply))
+		{
+			m_CompabilityMsg = "CPU and Powersupply not compatible";
+			m_CompatibilityStatus = false;
+		}
+	}
+
+	if (m_Configuration.pCpuCooler && m_Configuration.pCase)
+	{
+		if (!IsCompatible(*m_Configuration.pCpuCooler, *m_Configuration.pCase))
+		{
+			m_CompabilityMsg = "CPU Cooler and Case not compatible";
+			m_CompatibilityStatus = false;
+		}
+	}
+
+	if (m_Configuration.pMemory && m_Configuration.pStorage)
+	{
+		if (!IsCompatible(*m_Configuration.pMemory, *m_Configuration.pStorage))
+		{
+			m_CompabilityMsg = "Memory and Storage not compatible";
+			m_CompatibilityStatus = false;
+		}
+	}
+
+	if (m_Configuration.pMemory && m_Configuration.pStorage)
+	{
+		if (!IsCompatible(*m_Configuration.pMemory, *m_Configuration.pStorage))
+		{
+			m_CompabilityMsg = "Memory and Video card not compatible";
+			m_CompatibilityStatus = false;
+		}
+	}
+
+	if (m_Configuration.pMemory && m_Configuration.pPowerSupply)
+	{
+		if (!IsCompatible(*m_Configuration.pMemory, *m_Configuration.pPowerSupply))
+		{
+			m_CompabilityMsg = "Memory and Power supply not compatible";
+			m_CompatibilityStatus = false;
+		}
+	}
+
+	if (m_Configuration.pMemory && m_Configuration.pCase)
+	{
+		if (!IsCompatible(*m_Configuration.pMemory, *m_Configuration.pCase))
+		{
+			m_CompabilityMsg = "Memory and Case not compatible";
+			m_CompatibilityStatus = false;
+		}
+	}
+
+	if (m_Configuration.pStorage && m_Configuration.pVideoCard)
+	{
+		if (!IsCompatible(*m_Configuration.pStorage, *m_Configuration.pVideoCard))
+		{
+			m_CompabilityMsg = "Storage and Video card not compatible";
+			m_CompatibilityStatus = false;
+		}
+	}
+
+	if (m_Configuration.pStorage && m_Configuration.pPowerSupply)
+	{
+		if (!IsCompatible(*m_Configuration.pStorage, *m_Configuration.pPowerSupply))
+		{
+			m_CompabilityMsg = "Storage and Powersupply not compatible";
+			m_CompatibilityStatus = false;
+		}
+	}
+
+	if (m_Configuration.pStorage && m_Configuration.pCase)
+	{
+		if (!IsCompatible(*m_Configuration.pStorage, *m_Configuration.pCase))
+		{
+			m_CompabilityMsg = "Storage and Case not compatible";
+			m_CompatibilityStatus = false;
+		}
+	}
+
+	if (m_Configuration.pVideoCard && m_Configuration.pPowerSupply)
+	{
+		if (!IsCompatible(*m_Configuration.pVideoCard, *m_Configuration.pPowerSupply))
+		{
+			m_CompabilityMsg = "Video card and Power supply not compatible";
+			m_CompatibilityStatus = false;
+		}
+	}
+
+	if (m_Configuration.pVideoCard && m_Configuration.pCase)
+	{
+		if (!IsCompatible(*m_Configuration.pVideoCard, *m_Configuration.pCase))
+		{
+			m_CompabilityMsg = "Video card and case not compatible";
+			m_CompatibilityStatus = false;
+		}
+	}
+
+	if (m_Configuration.pPowerSupply && m_Configuration.pCase)
+	{
+		if (!IsCompatible(*m_Configuration.pPowerSupply, *m_Configuration.pCase))
+		{
+			m_CompabilityMsg = "Powersupply and Case not compatible";
+			m_CompatibilityStatus = false;
+		}
+	}
 }
 
 void Application::ImGUIFrame()
