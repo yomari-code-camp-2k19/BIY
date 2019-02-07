@@ -2,6 +2,18 @@
 
 #include "Components.h"
 
+struct configuration
+{
+	casing* pCase;
+	powerSupply* pPowerSupply;
+	videoCard* pVideoCard;
+	storage* pStorage;
+	memory* pMemory;
+	cpuCooler* pCpuCooler;
+	motherboard* pMotherBoard;
+	cpu* pCpu;
+};
+
 class Application
 {
 private:
@@ -30,6 +42,8 @@ private:
 	std::vector<cpuCooler> vCpuCooler;
 	std::vector<motherboard> vMotherboard;
 	std::vector<cpu> vCpu;
+
+	configuration m_Configuration;
 
 	i32 m_UsedMotherBoard;
 	i32 m_UsedProcessor;
@@ -89,6 +103,16 @@ void Application::SetComponents()
 	vMotherboard.push_back(motherboard{ "Asus PRIME Z390-A","LGA1151","ATX",4,64,0,183.00f });
 	vMotherboard.push_back(motherboard{ "Gigabyte H310M A","LGA1151","Micro ATX",2,32,5,55.99f });
 
+	m_Configuration.pCase = 0;
+	m_Configuration.pCpu = 0;
+	m_Configuration.pCpuCooler = 0;
+	m_Configuration.pMemory = 0;
+	m_Configuration.pMotherBoard = 0;
+	m_Configuration.pPowerSupply = 0;
+	m_Configuration.pStorage = 0;
+	m_Configuration.pVideoCard = 0;
+
+#define PRESENT_COMPONENT(x) ((x)!=-1)
 	m_UsedMotherBoard = -1;
 	m_UsedProcessor = -1;
 	m_UsedMemory = -1;
@@ -254,8 +278,8 @@ inline void Application::CurrentSelectedComponent()
 			}
 			if (currentOpen == i)
 			{
-				ImGui::BulletText("Series: %.2f", m.series);
-				ImGui::BulletText("Chipset: %u", m.chipset);
+				ImGui::BulletText("Series: %s", m.series.c_str());
+				ImGui::BulletText("Chipset: %s", m.chipset.c_str());
 				ImGui::BulletText("Memory: %u", m.memory);
 				ImGui::BulletText("Clk Rate: %.2f", m.ClkCore);
 				ImGui::BulletText("Average Rate: %.2f", m.avgRate);
@@ -320,6 +344,58 @@ inline void Application::CurrentSelectedComponent()
 	} break;
 	}
 	ImGui::End();
+
+	if (PRESENT_COMPONENT(m_UsedMotherBoard))
+		m_Configuration.pMotherBoard = &vMotherboard[m_UsedMotherBoard];
+	else
+		m_Configuration.pMotherBoard = 0;
+	
+	if (PRESENT_COMPONENT(m_UsedProcessor))
+		m_Configuration.pCpu = &vCpu[m_UsedProcessor];
+	else
+		m_Configuration.pCpu = 0;
+
+	if (PRESENT_COMPONENT(m_UsedMemory))
+		m_Configuration.pMemory = &vMemory[m_UsedMemory];
+	else
+		m_Configuration.pMemory = 0;
+
+	if (PRESENT_COMPONENT(m_UsedCooler))
+		m_Configuration.pCpuCooler = &vCpuCooler[m_UsedCooler];
+	else
+		m_Configuration.pCpuCooler= 0;
+
+	if (PRESENT_COMPONENT(m_UsedStorage))
+		m_Configuration.pStorage = &vStorage[m_UsedStorage];
+	else
+		m_Configuration.pStorage = 0;
+
+	if (PRESENT_COMPONENT(m_UsedVideoCard))
+		m_Configuration.pVideoCard = &vVideoCard[m_UsedVideoCard];
+	else
+		m_Configuration.pVideoCard = 0;
+
+	if (PRESENT_COMPONENT(m_UsedPowerSupply))
+		m_Configuration.pPowerSupply = &vPowerSupply[m_UsedPowerSupply];
+	else
+		m_Configuration.pPowerSupply = 0;
+
+	if (PRESENT_COMPONENT(m_UsedCase))
+		m_Configuration.pCase = &vCase[m_UsedCase];
+	else
+		m_Configuration.pCase = 0;
+
+	ImGui::Begin("Selected Components");
+	int numOfComponents = 0;
+
+	if (m_Configuration.pMotherBoard)
+	{
+		numOfComponents++;
+
+	}
+
+	ImGui::Text("Total number of compenents: %d", numOfComponents);
+	ImGui::End();
 }
 
 void Application::Init()
@@ -332,6 +408,14 @@ void Application::Init()
 	ResourceManager::GetShader("sprite").SetMatrix4("projection", projection);
 	// Load textures
 	ResourceManager::LoadTexture("res/BigSmile.png", GL_TRUE, "smile");
+	ResourceManager::LoadTexture("res/Case.png", GL_TRUE, "case");
+	ResourceManager::LoadTexture("res/Cooler.png", GL_TRUE, "cooler");
+	ResourceManager::LoadTexture("res/Memory.png", GL_TRUE, "memory");
+	ResourceManager::LoadTexture("res/MotherBoard.png", GL_TRUE, "motherboard");
+	ResourceManager::LoadTexture("res/PowerSupply.png", GL_TRUE, "powersupply");
+	ResourceManager::LoadTexture("res/Processor.png", GL_TRUE, "processor");
+	ResourceManager::LoadTexture("res/Storage.png", GL_TRUE, "storage");
+	ResourceManager::LoadTexture("res/VideoCard.png", GL_TRUE, "videocard");
 	// Set render-specific controls
 	m_Renderer = new Renderer2D(ResourceManager::GetShader("sprite"));
 
