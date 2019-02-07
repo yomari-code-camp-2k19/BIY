@@ -74,7 +74,7 @@ private:
 	void CurrentMenuSelection();
 	void UserConfiguration();
 public:
-	void Init();
+	void Init(Renderer2D* renderer);
 	void Update();
 	void ImGUIFrame();
 	void Render();
@@ -251,7 +251,10 @@ inline void Application::CurrentMenuSelection()
 				MotherBoardDataDisplay(m);
 				bool used = (m_UsedMotherBoard==i);
 				ImGui::Checkbox("Use", &used);
-				if (used) m_UsedMotherBoard = i; else m_UsedMotherBoard = -1;
+				if (used) m_UsedMotherBoard = i; else {
+					if(m_UsedMotherBoard == i)
+						m_UsedMotherBoard = -1;
+				}
 			}
 		}
 	} break;
@@ -268,7 +271,10 @@ inline void Application::CurrentMenuSelection()
 				ProcessorDataDisplay(m);
 				bool used = (m_UsedProcessor == i);
 				ImGui::Checkbox("Use", &used);
-				if (used) m_UsedProcessor = i; else m_UsedProcessor = -1;
+				if (used) m_UsedProcessor = i; else {
+					if (m_UsedProcessor == i)
+						m_UsedProcessor = -1;
+				}
 			}
 		}
 	} break;
@@ -285,7 +291,10 @@ inline void Application::CurrentMenuSelection()
 				MemoryDataDisplay(m);
 				bool used = (m_UsedMemory == i);
 				ImGui::Checkbox("Use", &used);
-				if (used) m_UsedMemory = i; else m_UsedMemory = -1;
+				if (used) m_UsedMemory = i;  else {
+					if (m_UsedMotherBoard == i)
+						m_UsedMotherBoard = -1;
+				}
 			}
 		}
 	} break;
@@ -302,7 +311,10 @@ inline void Application::CurrentMenuSelection()
 				CPUCoolerDataDisplay(m);
 				bool used = (m_UsedCooler == i);
 				ImGui::Checkbox("Use", &used);
-				if (used) m_UsedCooler = i; else m_UsedCooler = -1;
+				if (used) m_UsedCooler = i;  else {
+					if (m_UsedCooler == i)
+						m_UsedCooler = -1;
+				}
 			}
 		}
 	} break;
@@ -319,7 +331,10 @@ inline void Application::CurrentMenuSelection()
 				StorageDataDisplay(m);
 				bool used = (m_UsedStorage == i);
 				ImGui::Checkbox("Use", &used);
-				if (used) m_UsedStorage = i; else m_UsedStorage = -1;
+				if (used) m_UsedStorage = i;  else {
+					if (m_UsedStorage == i)
+						m_UsedStorage = -1;
+				}
 			}
 		}
 	} break;
@@ -336,7 +351,10 @@ inline void Application::CurrentMenuSelection()
 				VideoCardDataDisplay(m);
 				bool used = (m_UsedVideoCard == i);
 				ImGui::Checkbox("Use", &used);
-				if (used) m_UsedVideoCard = i; else m_UsedVideoCard = -1;
+				if (used) m_UsedVideoCard = i; else {
+					if (m_UsedVideoCard == i)
+						m_UsedVideoCard = -1;
+				}
 			}
 		}
 	} break;
@@ -353,7 +371,10 @@ inline void Application::CurrentMenuSelection()
 				PowerSupplyDataDisplay(m);
 				bool used = (m_UsedPowerSupply == i);
 				ImGui::Checkbox("Use", &used);
-				if (used) m_UsedPowerSupply = i; else m_UsedPowerSupply = -1;
+				if (used) m_UsedPowerSupply = i; else {
+					if (m_UsedPowerSupply == i)
+						m_UsedPowerSupply = -1;
+				}
 			}
 		}
 	} break;
@@ -370,7 +391,10 @@ inline void Application::CurrentMenuSelection()
 				CaseDataDisplay(m);
 				bool used = (m_UsedCase == i);
 				ImGui::Checkbox("Use", &used);
-				if (used) m_UsedCase = i; else m_UsedCase = -1;
+				if (used) m_UsedCase = i; else {
+					if (m_UsedCase == i)
+						m_UsedCase = -1;
+				}
 			}
 		}
 	} break;
@@ -546,16 +570,9 @@ void Application::UserConfiguration()
 	ImGui::End();
 }
 
-void Application::Init()
+void Application::Init(Renderer2D* renderer)
 {
-	// Load shaders
-	ResourceManager::LoadShader("shaders/vshader.vert", "shaders/fshader.frag", nullptr, "sprite");
-	// Configure shaders
-	m4x4 projection = m4x4::OrthographicC(0.0f, 1280.0f, 720.0f, 0.0f, -1.0f, 1.0f);
-	ResourceManager::GetShader("sprite").Use().SetInteger("image", 0);
-	ResourceManager::GetShader("sprite").SetMatrix4("projection", projection);
 	// Load textures
-	ResourceManager::LoadTexture("res/BigSmile.png", GL_TRUE, "smile");
 	ResourceManager::LoadTexture("res/Case.png", GL_TRUE, "case");
 	ResourceManager::LoadTexture("res/Cooler.png", GL_TRUE, "cooler");
 	ResourceManager::LoadTexture("res/Memory.png", GL_TRUE, "memory");
@@ -565,7 +582,7 @@ void Application::Init()
 	ResourceManager::LoadTexture("res/Storage.png", GL_TRUE, "storage");
 	ResourceManager::LoadTexture("res/VideoCard.png", GL_TRUE, "videocard");
 	// Set render-specific controls
-	m_Renderer = new Renderer2D(ResourceManager::GetShader("sprite"));
+	m_Renderer = renderer;
 
 	m_UserPrice = 0.0f;
 	m_LeftPrice = 0.0f;
@@ -603,6 +620,57 @@ void Application::ImGUIFrame()
 
 void Application::Render()
 {
-	m_Renderer->DrawSprite(ResourceManager::GetTexture("smile"), v2{ 200, 200 }, v2{ 300, 400 }, 45.0f, v3{ 0.0f, 1.0f, 0.0f });
+	if (m_Configuration.pMotherBoard)
+	{
+		auto& tex = ResourceManager::GetTexture("motherboard");
+		v2 dimension;
+		dimension.x = 400.0f;
+		dimension.y = 400.0f;
+		m_Renderer->Draw(tex, v2{ 150.0f, 150.0f }, dimension);
+	}
+
+	if (m_Configuration.pCpu)
+	{
+		auto& tex = ResourceManager::GetTexture("processor");
+		v2 dimension;
+		dimension.x = 100.0f;
+		dimension.y = 100.0f;
+		m_Renderer->Draw(tex, v2{ 580.0f, 300.0f }, dimension);
+	}
+
+	if (m_Configuration.pMemory)
+	{
+		auto& tex = ResourceManager::GetTexture("memory");
+		v2 dimension;
+		dimension.x = 130.0f;
+		dimension.y = 130.0f;
+		m_Renderer->Draw(tex, v2{ 500.0f, 550.0f }, dimension);
+	}
+
+	if (m_Configuration.pCpuCooler)
+	{
+		
+	}
+
+	if (m_Configuration.pStorage)
+	{
+
+	}
+
+	if (m_Configuration.pVideoCard)
+	{
+
+	}
+
+	if (m_Configuration.pPowerSupply)
+	{
+
+	}
+
+	if (m_Configuration.pCase)
+	{
+
+	}
+
 }
 

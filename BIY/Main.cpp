@@ -57,8 +57,20 @@ int main(int, char**)
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glDisable(GL_DEPTH_TEST);
 
+	ResourceManager::LoadTexture("res/Loading.png", GL_TRUE, "load");
+	ResourceManager::LoadShader("shaders/vshader.vert", "shaders/fshader.frag", nullptr, "sprite");
+	m4x4 projection = m4x4::OrthographicC(0.0f, 1280.0f, 720.0f, 0.0f, -1.0f, 1.0f);
+	ResourceManager::GetShader("sprite").Use().SetInteger("image", 0);
+	ResourceManager::GetShader("sprite").SetMatrix4("projection", projection);
+	Renderer2D* renderer = new Renderer2D(ResourceManager::GetShader("sprite"));
+
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT);
+	renderer->Draw(ResourceManager::GetTexture("load"), v2{ 0.0f, 0.0f }, v2{ 1280.0f, 720.0f });
+	glfwSwapBuffers(window);
+
 	Application app;
-	app.Init();
+	app.Init(renderer);
 
 	while (!glfwWindowShouldClose(window))
 	{
