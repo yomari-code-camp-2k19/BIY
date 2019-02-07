@@ -113,6 +113,30 @@
     <ClInclude Include="Components.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="json\autolink.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="json\config.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="json\features.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="json\forwards.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="json\json.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="json\reader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="json\value.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="json\writer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\vshader.vert" />

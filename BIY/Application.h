@@ -649,21 +649,38 @@ void Application::Render()
 
 	if (m_Configuration.pCpuCooler)
 	{
-		
+		auto& tex = ResourceManager::GetTexture("cooler");
+		v2 dimension;
+		dimension.x = 100.0f;
+		dimension.y = 100.0f;
+		m_Renderer->Draw(tex, v2{ 580.0f, 200.0f }, dimension);
 	}
 
 	if (m_Configuration.pStorage)
 	{
-
+		auto& tex = ResourceManager::GetTexture("storage");
+		v2 dimension;
+		dimension.x = 100.0f;
+		dimension.y = 100.0f;
+		m_Renderer->Draw(tex, v2{ 80.0f, 80.0f }, dimension);
 	}
 
 	if (m_Configuration.pVideoCard)
 	{
-
+		auto& tex = ResourceManager::GetTexture("videocard");
+		v2 dimension;
+		dimension.x = 100.0f;
+		dimension.y = 100.0f;
+		m_Renderer->Draw(tex, v2{ 20.0f, 250.0f }, dimension);
 	}
 
 	if (m_Configuration.pPowerSupply)
 	{
+		auto& tex = ResourceManager::GetTexture("powersupply");
+		v2 dimension;
+		dimension.x = 100.0f;
+		dimension.y = 100.0f;
+		m_Renderer->Draw(tex, v2{ 250.0f, 575.0f }, dimension);
 
 	}
 
