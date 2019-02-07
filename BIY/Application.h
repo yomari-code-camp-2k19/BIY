@@ -2,6 +2,18 @@
 
 #include "Components.h"
 
+struct configuration
+{
+	casing* pCase;
+	powerSupply* pPowerSupply;
+	videoCard* pVideoCard;
+	storage* pStorage;
+	memory* pMemory;
+	cpuCooler* pCpuCooler;
+	motherboard* pMotherBoard;
+	cpu* pCpu;
+};
+
 class Application
 {
 private:
@@ -31,6 +43,8 @@ private:
 	std::vector<motherboard> vMotherboard;
 	std::vector<cpu> vCpu;
 
+	configuration m_Configuration;
+
 	i32 m_UsedMotherBoard;
 	i32 m_UsedProcessor;
 	i32 m_UsedMemory;
@@ -43,7 +57,6 @@ private:
 	static const char* s_ComponentNames[pc_components::cTotal - 1];
 
 	void SetComponents();
-	void CurrentSelectedComponent();
 
 	void MotherBoardDataDisplay(motherboard& m);
 	void ProcessorDataDisplay(cpu& m);
@@ -52,6 +65,8 @@ private:
 	void CaseDataDisplay(casing& m);
 	void MemoryDataDisplay(memory& m);
 	void StorageDataDisplay(storage& m);
+	void CurrentMenuSelection();
+	void UserConfiguration();
 public:
 	void Init();
 	void Update();
@@ -117,6 +132,16 @@ void Application::SetComponents()
 	vMotherboard.push_back(motherboard{ "Asus PRIME Z390-A","LGA1151","ATX",4,64,0,183.00f });
 	vMotherboard.push_back(motherboard{ "Gigabyte H310M A","LGA1151","Micro ATX",2,32,5,55.99f });
 
+	m_Configuration.pCase = 0;
+	m_Configuration.pCpu = 0;
+	m_Configuration.pCpuCooler = 0;
+	m_Configuration.pMemory = 0;
+	m_Configuration.pMotherBoard = 0;
+	m_Configuration.pPowerSupply = 0;
+	m_Configuration.pStorage = 0;
+	m_Configuration.pVideoCard = 0;
+
+#define PRESENT_COMPONENT(x) ((x)!=-1)
 	m_UsedMotherBoard = -1;
 	m_UsedProcessor = -1;
 	m_UsedMemory = -1;
@@ -127,7 +152,16 @@ void Application::SetComponents()
 	m_UsedCase = -1;
 }
 
-inline void Application::CurrentSelectedComponent()
+#define DISPLAY_CBUTTON(m) \
+if (ImGui::Button(m.name.c_str(), ImVec2(200.0f, 30.0f))) \
+{ \
+	if (currentOpen == i) \
+		currentOpen = -1; \
+	else \
+		currentOpen = i; \
+}
+
+inline void Application::CurrentMenuSelection()
 {
 
 	static i32 currentOpen = -1;
@@ -139,13 +173,7 @@ inline void Application::CurrentSelectedComponent()
 		for (int i=0; i<vMotherboard.size(); ++i)
 		{
 			auto& m = vMotherboard[i];
-			if (ImGui::Button(m.name.c_str(), ImVec2(200.0f, 30.0f)))
-			{
-				if (currentOpen == i)
-					currentOpen = -1;
-				else
-					currentOpen = i;
-			}
+			DISPLAY_CBUTTON(m);
 			if (currentOpen == i)
 			{
 				MotherBoardDataDisplay(m);
@@ -167,13 +195,7 @@ inline void Application::CurrentSelectedComponent()
 		for (int i = 0; i < (i32)vCpu.size(); ++i)
 		{
 			auto& m = vCpu[i];
-			if (ImGui::Button(m.name.c_str(), ImVec2(200.0f, 30.0f)))
-			{
-				if (currentOpen == i)
-					currentOpen = -1;
-				else
-					currentOpen = i;
-			}
+			DISPLAY_CBUTTON(m);
 			if (currentOpen == i)
 			{
 				ImGui::BulletText("Speed: %.2f", m.speed);
@@ -193,16 +215,10 @@ inline void Application::CurrentSelectedComponent()
 		for (int i = 0; i < vMemory.size(); ++i)
 		{
 			auto& m = vMemory[i];
-			if (ImGui::Button(m.name.c_str(), ImVec2(200.0f, 30.0f)))
-			{
-				if (currentOpen == i)
-					currentOpen = -1;
-				else
-					currentOpen = i;
-			}
+			DISPLAY_CBUTTON(m);
 			if (currentOpen == i)
 			{
-				MemoryDataDisplay(m)
+				MemoryDataDisplay(m);
 				/*ImGui::BulletText("Speed: %s", m.speed.c_str());
 				ImGui::BulletText("Type: %s", m.type.c_str());
 				ImGui::BulletText("CAS: %i", m.cas);
@@ -222,13 +238,7 @@ inline void Application::CurrentSelectedComponent()
 		for (int i = 0; i < vCpuCooler.size(); ++i)
 		{
 			auto& m = vCpuCooler[i];
-			if (ImGui::Button(m.name.c_str(), ImVec2(200.0f, 30.0f)))
-			{
-				if (currentOpen == i)
-					currentOpen = -1;
-				else
-					currentOpen = i;
-			}
+			DISPLAY_CBUTTON(m);
 			if (currentOpen == i)
 			{
 				ImGui::BulletText("Min RPM: %u", m.minRpm);
@@ -248,13 +258,7 @@ inline void Application::CurrentSelectedComponent()
 		for (int i = 0; i < vStorage.size(); ++i)
 		{
 			auto& m = vStorage[i];
-			if (ImGui::Button(m.name.c_str(), ImVec2(200.0f, 30.0f)))
-			{
-				if (currentOpen == i)
-					currentOpen = -1;
-				else
-					currentOpen = i;
-			}
+			DISPLAY_CBUTTON(m);
 			if (currentOpen == i)
 			{
 				ImGui::BulletText("Series: %s", m.series.c_str());
@@ -276,13 +280,7 @@ inline void Application::CurrentSelectedComponent()
 		for (int i = 0; i < vVideoCard.size(); ++i)
 		{
 			auto& m = vVideoCard[i];
-			if (ImGui::Button(m.name.c_str(), ImVec2(200.0f, 30.0f)))
-			{
-				if (currentOpen == i)
-					currentOpen = -1;
-				else
-					currentOpen = i;
-			}
+			DISPLAY_CBUTTON(m);
 			if (currentOpen == i)
 			{
 				ImGui::BulletText("Series: %s", m.series.c_str());
@@ -303,13 +301,7 @@ inline void Application::CurrentSelectedComponent()
 		for (int i = 0; i < vPowerSupply.size(); ++i)
 		{
 			auto& m = vPowerSupply[i];
-			if (ImGui::Button(m.name.c_str(), ImVec2(200.0f, 30.0f)))
-			{
-				if (currentOpen == i)
-					currentOpen = -1;
-				else
-					currentOpen = i;
-			}
+			DISPLAY_CBUTTON(m);
 			if (currentOpen == i)
 			{
 				ImGui::BulletText("Series: %s", m.series.c_str());
@@ -331,13 +323,7 @@ inline void Application::CurrentSelectedComponent()
 		for (int i = 0; i < vCase.size(); ++i)
 		{
 			auto& m = vCase[i];
-			if (ImGui::Button(m.name.c_str(), ImVec2(200.0f, 30.0f)))
-			{
-				if (currentOpen == i)
-					currentOpen = -1;
-				else
-					currentOpen = i;
-			}
+			DISPLAY_CBUTTON(m);
 			if (currentOpen == i)
 			{
 				ImGui::BulletText("Type: %s", m.type.c_str());
@@ -349,6 +335,105 @@ inline void Application::CurrentSelectedComponent()
 		}
 	} break;
 	}
+	ImGui::End();
+
+	if (PRESENT_COMPONENT(m_UsedMotherBoard))
+		m_Configuration.pMotherBoard = &vMotherboard[m_UsedMotherBoard];
+	else
+		m_Configuration.pMotherBoard = 0;
+	
+	if (PRESENT_COMPONENT(m_UsedProcessor))
+		m_Configuration.pCpu = &vCpu[m_UsedProcessor];
+	else
+		m_Configuration.pCpu = 0;
+
+	if (PRESENT_COMPONENT(m_UsedMemory))
+		m_Configuration.pMemory = &vMemory[m_UsedMemory];
+	else
+		m_Configuration.pMemory = 0;
+
+	if (PRESENT_COMPONENT(m_UsedCooler))
+		m_Configuration.pCpuCooler = &vCpuCooler[m_UsedCooler];
+	else
+		m_Configuration.pCpuCooler= 0;
+
+	if (PRESENT_COMPONENT(m_UsedStorage))
+		m_Configuration.pStorage = &vStorage[m_UsedStorage];
+	else
+		m_Configuration.pStorage = 0;
+
+	if (PRESENT_COMPONENT(m_UsedVideoCard))
+		m_Configuration.pVideoCard = &vVideoCard[m_UsedVideoCard];
+	else
+		m_Configuration.pVideoCard = 0;
+
+	if (PRESENT_COMPONENT(m_UsedPowerSupply))
+		m_Configuration.pPowerSupply = &vPowerSupply[m_UsedPowerSupply];
+	else
+		m_Configuration.pPowerSupply = 0;
+
+	if (PRESENT_COMPONENT(m_UsedCase))
+		m_Configuration.pCase = &vCase[m_UsedCase];
+	else
+		m_Configuration.pCase = 0;
+}
+
+void Application::UserConfiguration()
+{
+	static i32 currentOpen = -1;
+	ImGui::Begin("Selected Components");
+	int numOfComponents = 0;
+
+	if (m_Configuration.pMotherBoard)
+	{
+		numOfComponents++;
+
+		//MotherBoardDataDisplay(*m_Configuration.pMotherBoard);
+	}
+	
+	if (m_Configuration.pCpu)
+	{
+		numOfComponents++;
+		//CPUDataDisplay(*m_Configuration.pCpu);
+	}
+
+	if (m_Configuration.pMemory)
+	{
+		numOfComponents++;
+		//MemoryDataDisplay(*m_Configuration.pMemory);
+	}
+
+	if (m_Configuration.pCpuCooler)
+	{
+		numOfComponents++;
+		//CPUCoolerDataDisplay(*m_Configuration.pCpuCooler);
+	}
+
+	if (m_Configuration.pStorage)
+	{
+		numOfComponents++;
+		//StorageDataDisplay(*m_Configuration.pStorage);
+	}
+
+	if (m_Configuration.pVideoCard)
+	{
+		numOfComponents++;
+		//VideoCardDataDisplay(*m_Configuration.pVideoCard);
+	}
+
+	if (m_Configuration.pPowerSupply)
+	{
+		numOfComponents++;
+		//PowerSupplyDataDisplay(*m_Configuration.pPowerSupply);
+	}
+
+	if (m_Configuration.pCase)
+	{
+		numOfComponents++;
+		//CaseDataDisplay(*m_Configuration.pCase);
+	}
+
+	ImGui::Text("Total number of compenents: %d", numOfComponents);
 	ImGui::End();
 }
 
@@ -362,6 +447,14 @@ void Application::Init()
 	ResourceManager::GetShader("sprite").SetMatrix4("projection", projection);
 	// Load textures
 	ResourceManager::LoadTexture("res/BigSmile.png", GL_TRUE, "smile");
+	ResourceManager::LoadTexture("res/Case.png", GL_TRUE, "case");
+	ResourceManager::LoadTexture("res/Cooler.png", GL_TRUE, "cooler");
+	ResourceManager::LoadTexture("res/Memory.png", GL_TRUE, "memory");
+	ResourceManager::LoadTexture("res/MotherBoard.png", GL_TRUE, "motherboard");
+	ResourceManager::LoadTexture("res/PowerSupply.png", GL_TRUE, "powersupply");
+	ResourceManager::LoadTexture("res/Processor.png", GL_TRUE, "processor");
+	ResourceManager::LoadTexture("res/Storage.png", GL_TRUE, "storage");
+	ResourceManager::LoadTexture("res/VideoCard.png", GL_TRUE, "videocard");
 	// Set render-specific controls
 	m_Renderer = new Renderer2D(ResourceManager::GetShader("sprite"));
 
@@ -393,7 +486,8 @@ void Application::ImGUIFrame()
 	if (ImGui::Button("Video Card", size)) m_SelectedCompenent = cVideoCard;
 	ImGui::End();
 	if (m_SelectedCompenent)
-		CurrentSelectedComponent();
+		CurrentMenuSelection();
+	UserConfiguration();
 }
 
 void Application::Render()
