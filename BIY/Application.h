@@ -59,12 +59,14 @@ private:
 	void SetComponents();
 
 	void MotherBoardDataDisplay(motherboard& m);
+	void MemoryDataDisplay(memory& m);
 	void ProcessorDataDisplay(cpu& m);
 	void VideoCardDataDisplay(videoCard& m);
 	void PowerSupplyDataDisplay(powerSupply& m);
 	void CaseDataDisplay(casing& m);
-	void MemoryDataDisplay(memory& m);
 	void StorageDataDisplay(storage& m);
+	void CPUCoolerDataDisplay(cpuCooler& m);
+
 	void CurrentMenuSelection();
 	void UserConfiguration();
 public:
@@ -96,7 +98,63 @@ void Application::MemoryDataDisplay(memory& m)
 	ImGui::BulletText("Mod X Each Mod: %u X %u", m.numModule, m.eachModule);
 	ImGui::BulletText("Size: %u", m.size);
 	ImGui::BulletText("Average Rating: %.2f", m.avgRating);
-	ImGui::BulletText("Average Price: NPRs.%.2f", m.Price * 114.72);
+	ImGui::BulletText("Average Price: NPRs.%.2f", m.price * 114.72);
+}
+
+inline void Application::ProcessorDataDisplay(cpu & m)
+{
+	ImGui::BulletText("Speed: %.2f", m.speed);
+	ImGui::BulletText("Cores: %u", m.core);
+	ImGui::BulletText("Power: %u", m.power);
+	ImGui::BulletText("Average Rate: %.2f", m.avgRate);
+	ImGui::BulletText("Average Price: NPRs.%.2f", m.price * 114.72);
+}
+
+inline void Application::VideoCardDataDisplay(videoCard & m)
+{
+	ImGui::BulletText("Series: %s", m.series.c_str());
+	ImGui::BulletText("Chipset: %s", m.chipset.c_str());
+	ImGui::BulletText("Memory: %u GB", m.memory);
+	ImGui::BulletText("Clk Rate: %.2f GHz", m.ClkCore);
+	ImGui::BulletText("Average Rate: %.2f", m.avgRate);
+	ImGui::BulletText("Average Price: NPRs.%.2f", m.price * 114.72);
+}
+
+inline void Application::PowerSupplyDataDisplay(powerSupply & m)
+{
+	ImGui::BulletText("Series: %s", m.series.c_str());
+	ImGui::BulletText("Form: %s", m.form.c_str());
+	ImGui::BulletText("Efficiency: %s", m.efficiency.c_str());
+	ImGui::BulletText("Power: %i W", m.power);
+	ImGui::BulletText("Modular: %s", m.modular.c_str());
+	ImGui::BulletText("Average Rating: %.2f", m.avgRate);
+	ImGui::BulletText("Average Price: NPRs.%.2f", m.price * 114.72);
+}
+
+inline void Application::CaseDataDisplay(casing & m)
+{
+	ImGui::BulletText("Type: %s", m.type.c_str());
+	ImGui::BulletText("Average Price: NPRs.%.2f", m.price * 114.72);
+}
+
+inline void Application::StorageDataDisplay(storage & m)
+{
+	ImGui::BulletText("Series: %s", m.series.c_str());
+	ImGui::BulletText("Form: %s", m.form.c_str());
+	ImGui::BulletText("Type: %s", m.type.c_str());
+	ImGui::BulletText("Capacity: %s", m.capacity.c_str());
+	ImGui::BulletText("Cache: %.2f MB", m.cache);
+	ImGui::BulletText("Average Rating: %.2f", m.avgRate);
+	ImGui::BulletText("Average Price: NPRs.%.2f", m.price * 114.72);
+}
+
+inline void Application::CPUCoolerDataDisplay(cpuCooler & m)
+{
+	ImGui::BulletText("Min RPM: %u", m.minRpm);
+	ImGui::BulletText("Max RPM: %u", m.maxRpm);
+	ImGui::BulletText("Noise Level: %u", m.noiseLevel);
+	ImGui::BulletText("Average Rating: %.2f", m.avgRate);
+	ImGui::BulletText("Average Price: NPRs.%.2f", m.price * 114.72);
 }
 
 void Application::SetComponents()
@@ -156,7 +214,7 @@ void Application::SetComponents()
 if (ImGui::Button(m.name.c_str(), ImVec2(200.0f, 30.0f))) \
 { \
 	if (currentOpen == i) \
-		currentOpen = -1; \
+		currentOpen = 0; \
 	else \
 		currentOpen = i; \
 }
@@ -177,15 +235,9 @@ inline void Application::CurrentMenuSelection()
 			if (currentOpen == i)
 			{
 				MotherBoardDataDisplay(m);
-				/*ImGui::BulletText("Socket: %s", m.socket.c_str());
-				ImGui::BulletText("Form Factor: %s", m.formFactor.c_str());
-				ImGui::BulletText("Ram Slot: %u", m.ramSlot);
-				ImGui::BulletText("Max Ram Suported: %u", m.maxRam);
-				ImGui::BulletText("Average Rate: %.2f", m.maxRam);
-				ImGui::BulletText("Average Price: NPRs.%.2f", m.price * 114.72);*/
 				bool used = (m_UsedMotherBoard==i);
 				ImGui::Checkbox("Use", &used);
-				if (used) m_UsedMotherBoard = i;
+				if (used) m_UsedMotherBoard = i; else m_UsedMotherBoard = -1;
 			}
 		}
 	} break;
@@ -198,14 +250,10 @@ inline void Application::CurrentMenuSelection()
 			DISPLAY_CBUTTON(m);
 			if (currentOpen == i)
 			{
-				ImGui::BulletText("Speed: %.2f", m.speed);
-				ImGui::BulletText("Cores: %u", m.core);
-				ImGui::BulletText("Power: %u", m.power);
-				ImGui::BulletText("Average Rate: %.2f", m.avgRate);
-				ImGui::BulletText("Average Price: NPRs.%.2f", m.price * 114.72);
+				ProcessorDataDisplay(m);
 				bool used = (m_UsedProcessor == i);
 				ImGui::Checkbox("Use", &used);
-				if (used) m_UsedProcessor = i;
+				if (used) m_UsedProcessor = i; else m_UsedProcessor = -1;
 			}
 		}
 	} break;
@@ -219,16 +267,9 @@ inline void Application::CurrentMenuSelection()
 			if (currentOpen == i)
 			{
 				MemoryDataDisplay(m);
-				/*ImGui::BulletText("Speed: %s", m.speed.c_str());
-				ImGui::BulletText("Type: %s", m.type.c_str());
-				ImGui::BulletText("CAS: %i", m.cas);
-				ImGui::BulletText("Mod X Each Mod: %u X %u", m.numModule, m.eachModule);
-				ImGui::BulletText("Size: %u", m.size);
-				ImGui::BulletText("Average Rating: %.2f", m.avgRating);
-				ImGui::BulletText("Average Price: NPRs.%.2f", m.Price * 114.72);*/
 				bool used = (m_UsedMemory == i);
 				ImGui::Checkbox("Use", &used);
-				if (used) m_UsedMemory = i;
+				if (used) m_UsedMemory = i; else m_UsedMemory = -1;
 			}
 		}
 	} break;
@@ -241,14 +282,10 @@ inline void Application::CurrentMenuSelection()
 			DISPLAY_CBUTTON(m);
 			if (currentOpen == i)
 			{
-				ImGui::BulletText("Min RPM: %u", m.minRpm);
-				ImGui::BulletText("Max RPM: %u", m.maxRpm);
-				ImGui::BulletText("Noise Level: %u", m.noiseLevel);
-				ImGui::BulletText("Average Rating: %.2f", m.avgRate);
-				ImGui::BulletText("Average Price: NPRs.%.2f", m.price * 114.72);
+				CPUCoolerDataDisplay(m);
 				bool used = (m_UsedCooler == i);
 				ImGui::Checkbox("Use", &used);
-				if (used) m_UsedCooler = i;
+				if (used) m_UsedCooler = i; else m_UsedCooler = -1;
 			}
 		}
 	} break;
@@ -261,16 +298,10 @@ inline void Application::CurrentMenuSelection()
 			DISPLAY_CBUTTON(m);
 			if (currentOpen == i)
 			{
-				ImGui::BulletText("Series: %s", m.series.c_str());
-				ImGui::BulletText("Form: %s", m.form.c_str());
-				ImGui::BulletText("Type: %s", m.type.c_str());
-				ImGui::BulletText("Capacity: %s", m.capacity.c_str());
-				ImGui::BulletText("Cache: %.2f MB", m.cache);
-				ImGui::BulletText("Average Rating: %.2f", m.avgRate);
-				ImGui::BulletText("Average Price: NPRs.%.2f", m.price * 114.72);
+				StorageDataDisplay(m);
 				bool used = (m_UsedStorage == i);
 				ImGui::Checkbox("Use", &used);
-				if (used) m_UsedStorage = i;
+				if (used) m_UsedStorage = i; else m_UsedStorage = -1;
 			}
 		}
 	} break;
@@ -283,15 +314,10 @@ inline void Application::CurrentMenuSelection()
 			DISPLAY_CBUTTON(m);
 			if (currentOpen == i)
 			{
-				ImGui::BulletText("Series: %s", m.series.c_str());
-				ImGui::BulletText("Chipset: %s", m.chipset.c_str());
-				ImGui::BulletText("Memory: %u GB", m.memory);
-				ImGui::BulletText("Clk Rate: %.2f GHz", m.ClkCore);
-				ImGui::BulletText("Average Rate: %.2f", m.avgRate);
-				ImGui::BulletText("Average Price: NPRs.%.2f", m.Price * 114.72);
+				VideoCardDataDisplay(m);
 				bool used = (m_UsedVideoCard == i);
 				ImGui::Checkbox("Use", &used);
-				if (used) m_UsedVideoCard = i;
+				if (used) m_UsedVideoCard = i; else m_UsedVideoCard = -1;
 			}
 		}
 	} break;
@@ -304,16 +330,10 @@ inline void Application::CurrentMenuSelection()
 			DISPLAY_CBUTTON(m);
 			if (currentOpen == i)
 			{
-				ImGui::BulletText("Series: %s", m.series.c_str());
-				ImGui::BulletText("Form: %s", m.form.c_str());
-				ImGui::BulletText("Efficiency: %s", m.efficiency.c_str());
-				ImGui::BulletText("Power: %i W", m.power);
-				ImGui::BulletText("Modular: %s", m.modular.c_str());
-				ImGui::BulletText("Average Rating: %.2f", m.avgRate);
-				ImGui::BulletText("Average Price: NPRs.%.2f", m.price * 114.72);
+				PowerSupplyDataDisplay(m);
 				bool used = (m_UsedPowerSupply == i);
 				ImGui::Checkbox("Use", &used);
-				if (used) m_UsedPowerSupply = i;
+				if (used) m_UsedPowerSupply = i; else m_UsedPowerSupply = -1;
 			}
 		}
 	} break;
@@ -326,11 +346,10 @@ inline void Application::CurrentMenuSelection()
 			DISPLAY_CBUTTON(m);
 			if (currentOpen == i)
 			{
-				ImGui::BulletText("Type: %s", m.type.c_str());
-				ImGui::BulletText("Average Price: NPRs.%.2f", m.price * 114.72);
+				CaseDataDisplay(m);
 				bool used = (m_UsedCase == i);
 				ImGui::Checkbox("Use", &used);
-				if (used) m_UsedCase = i;
+				if (used) m_UsedCase = i; else m_UsedCase = -1;
 			}
 		}
 	} break;
@@ -380,60 +399,112 @@ inline void Application::CurrentMenuSelection()
 
 void Application::UserConfiguration()
 {
-	static i32 currentOpen = -1;
+	static i32 currentOpen = 0;
+
 	ImGui::Begin("Selected Components");
 	int numOfComponents = 0;
+	f32 totalPrice = 0.0f;
+	ImVec4 color(1.0f, 0.4f, 0.0f, 1.0f);
 
 	if (m_Configuration.pMotherBoard)
 	{
 		numOfComponents++;
-
-		//MotherBoardDataDisplay(*m_Configuration.pMotherBoard);
+		auto i = Application::cMotherboard;
+		auto& m = *m_Configuration.pMotherBoard;
+		ImGui::TextColored(color, "Motherboard");
+		ImGui::SameLine();
+		DISPLAY_CBUTTON(m);
+		if (currentOpen == i)
+			MotherBoardDataDisplay(m);
+		totalPrice += m.price;
 	}
 	
 	if (m_Configuration.pCpu)
 	{
 		numOfComponents++;
-		//CPUDataDisplay(*m_Configuration.pCpu);
+		auto i = Application::cProcessor;
+		auto& m = *m_Configuration.pCpu;
+		ImGui::TextColored(color, "Processor");
+		DISPLAY_CBUTTON(m);
+		if (currentOpen == i)
+			ProcessorDataDisplay(m);
+		totalPrice += m.price;
 	}
 
 	if (m_Configuration.pMemory)
 	{
 		numOfComponents++;
-		//MemoryDataDisplay(*m_Configuration.pMemory);
+		auto i = Application::cMemory;
+		auto& m = *m_Configuration.pMemory;
+		ImGui::TextColored(color, "Memory");
+		DISPLAY_CBUTTON(m);
+		if (currentOpen == i)
+			MemoryDataDisplay(m);
+		totalPrice += m.price;
 	}
 
 	if (m_Configuration.pCpuCooler)
 	{
 		numOfComponents++;
-		//CPUCoolerDataDisplay(*m_Configuration.pCpuCooler);
+		auto i = Application::cCooler;
+		auto& m = *m_Configuration.pCpuCooler;
+		ImGui::TextColored(color, "CPU Cooler");
+		DISPLAY_CBUTTON(m);
+		if (currentOpen == i)
+			CPUCoolerDataDisplay(m);
+		totalPrice += m.price;
 	}
 
 	if (m_Configuration.pStorage)
 	{
 		numOfComponents++;
-		//StorageDataDisplay(*m_Configuration.pStorage);
+		auto i = Application::cStorage;
+		auto& m = *m_Configuration.pStorage;
+		ImGui::TextColored(color, "Storage");
+		DISPLAY_CBUTTON(m);
+		if (currentOpen == i)
+			StorageDataDisplay(m);
+		totalPrice += m.price;
 	}
 
 	if (m_Configuration.pVideoCard)
 	{
 		numOfComponents++;
-		//VideoCardDataDisplay(*m_Configuration.pVideoCard);
+		auto i = Application::cVideoCard;
+		auto& m = *m_Configuration.pVideoCard;
+		ImGui::TextColored(color, "Video Card");
+		DISPLAY_CBUTTON(m);
+		if (currentOpen == i)
+			VideoCardDataDisplay(m);
+		totalPrice += m.price;
 	}
 
 	if (m_Configuration.pPowerSupply)
 	{
 		numOfComponents++;
-		//PowerSupplyDataDisplay(*m_Configuration.pPowerSupply);
+		auto i = Application::cPowerSupply;
+		auto& m = *m_Configuration.pPowerSupply;
+		ImGui::TextColored(color, "Power Supply");
+		DISPLAY_CBUTTON(m);
+		if (currentOpen == i)
+			PowerSupplyDataDisplay(m);
+		totalPrice += m.price;
 	}
 
 	if (m_Configuration.pCase)
 	{
 		numOfComponents++;
-		//CaseDataDisplay(*m_Configuration.pCase);
+		auto i = Application::cCase;
+		auto& m = *m_Configuration.pCase;
+		ImGui::TextColored(color, "Case");
+		DISPLAY_CBUTTON(m);
+		if (currentOpen == i)
+			CaseDataDisplay(m);
+		totalPrice += m.price;
 	}
 
-	ImGui::Text("Total number of compenents: %d", numOfComponents);
+	ImGui::TextColored(color, "Total number of compenents: %d", numOfComponents);
+	ImGui::TextColored(color, "Total Price: %.2f", totalPrice * 114.720f);
 	ImGui::End();
 }
 
