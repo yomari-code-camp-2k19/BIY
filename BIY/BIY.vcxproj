@@ -188,6 +188,7 @@
     <ClInclude Include="resourceManager.h" />
     <ClInclude Include="Application.h" />
     <ClInclude Include="Components.h" />
+    <ClInclude Include="stb_image.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\fshader.frag" />

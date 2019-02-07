@@ -137,6 +137,12 @@
     <ClInclude Include="json\writer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+<<<<<<< HEAD
+=======
+    <ClInclude Include="stb_image.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+>>>>>>> 7924bf2bee7acf44807778e460dbc0113b7d51cf
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\vshader.vert" />
