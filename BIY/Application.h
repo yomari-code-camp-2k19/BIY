@@ -57,7 +57,8 @@ private:
 	static const char* s_ComponentNames[pc_components::cTotal - 1];
 
 	void SetComponents();
-	void CurrentSelectedComponent();
+	void CurrentMenuSelection();
+	void UserConfiguration();
 public:
 	void Init();
 	void Update();
@@ -123,7 +124,16 @@ void Application::SetComponents()
 	m_UsedCase = -1;
 }
 
-inline void Application::CurrentSelectedComponent()
+#define DISPLAY_CBUTTON(m) \
+if (ImGui::Button(m.name.c_str(), ImVec2(200.0f, 30.0f))) \
+{ \
+	if (currentOpen == i) \
+		currentOpen = -1; \
+	else \
+		currentOpen = i; \
+}
+
+inline void Application::CurrentMenuSelection()
 {
 	static i32 currentOpen = -1;
 	ImGui::Begin(s_ComponentNames[m_SelectedCompenent - 1]);
@@ -134,13 +144,7 @@ inline void Application::CurrentSelectedComponent()
 		for (int i=0; i<vMotherboard.size(); ++i)
 		{
 			auto& m = vMotherboard[i];
-			if (ImGui::Button(m.name.c_str(), ImVec2(200.0f, 30.0f)))
-			{
-				if (currentOpen == i)
-					currentOpen = -1;
-				else
-					currentOpen = i;
-			}
+			DISPLAY_CBUTTON(m);
 			if (currentOpen == i)
 			{
 				ImGui::BulletText("Socket: %s", m.socket.c_str());
@@ -161,13 +165,7 @@ inline void Application::CurrentSelectedComponent()
 		for (int i = 0; i < (i32)vCpu.size(); ++i)
 		{
 			auto& m = vCpu[i];
-			if (ImGui::Button(m.name.c_str(), ImVec2(200.0f, 30.0f)))
-			{
-				if (currentOpen == i)
-					currentOpen = -1;
-				else
-					currentOpen = i;
-			}
+			DISPLAY_CBUTTON(m);
 			if (currentOpen == i)
 			{
 				ImGui::BulletText("Speed: %.2f", m.speed);
@@ -187,13 +185,7 @@ inline void Application::CurrentSelectedComponent()
 		for (int i = 0; i < vMemory.size(); ++i)
 		{
 			auto& m = vMemory[i];
-			if (ImGui::Button(m.name.c_str(), ImVec2(200.0f, 30.0f)))
-			{
-				if (currentOpen == i)
-					currentOpen = -1;
-				else
-					currentOpen = i;
-			}
+			DISPLAY_CBUTTON(m);
 			if (currentOpen == i)
 			{
 				ImGui::BulletText("Speed: %s", m.speed.c_str());
@@ -215,13 +207,7 @@ inline void Application::CurrentSelectedComponent()
 		for (int i = 0; i < vCpuCooler.size(); ++i)
 		{
 			auto& m = vCpuCooler[i];
-			if (ImGui::Button(m.name.c_str(), ImVec2(200.0f, 30.0f)))
-			{
-				if (currentOpen == i)
-					currentOpen = -1;
-				else
-					currentOpen = i;
-			}
+			DISPLAY_CBUTTON(m);
 			if (currentOpen == i)
 			{
 				ImGui::BulletText("Min RPM: %u", m.minRpm);
@@ -241,13 +227,7 @@ inline void Application::CurrentSelectedComponent()
 		for (int i = 0; i < vStorage.size(); ++i)
 		{
 			auto& m = vStorage[i];
-			if (ImGui::Button(m.name.c_str(), ImVec2(200.0f, 30.0f)))
-			{
-				if (currentOpen == i)
-					currentOpen = -1;
-				else
-					currentOpen = i;
-			}
+			DISPLAY_CBUTTON(m);
 			if (currentOpen == i)
 			{
 				ImGui::BulletText("Series: %s", m.series.c_str());
@@ -269,13 +249,7 @@ inline void Application::CurrentSelectedComponent()
 		for (int i = 0; i < vVideoCard.size(); ++i)
 		{
 			auto& m = vVideoCard[i];
-			if (ImGui::Button(m.name.c_str(), ImVec2(200.0f, 30.0f)))
-			{
-				if (currentOpen == i)
-					currentOpen = -1;
-				else
-					currentOpen = i;
-			}
+			DISPLAY_CBUTTON(m);
 			if (currentOpen == i)
 			{
 				ImGui::BulletText("Series: %s", m.series.c_str());
@@ -296,13 +270,7 @@ inline void Application::CurrentSelectedComponent()
 		for (int i = 0; i < vPowerSupply.size(); ++i)
 		{
 			auto& m = vPowerSupply[i];
-			if (ImGui::Button(m.name.c_str(), ImVec2(200.0f, 30.0f)))
-			{
-				if (currentOpen == i)
-					currentOpen = -1;
-				else
-					currentOpen = i;
-			}
+			DISPLAY_CBUTTON(m);
 			if (currentOpen == i)
 			{
 				ImGui::BulletText("Series: %s", m.series.c_str());
@@ -324,13 +292,7 @@ inline void Application::CurrentSelectedComponent()
 		for (int i = 0; i < vCase.size(); ++i)
 		{
 			auto& m = vCase[i];
-			if (ImGui::Button(m.name.c_str(), ImVec2(200.0f, 30.0f)))
-			{
-				if (currentOpen == i)
-					currentOpen = -1;
-				else
-					currentOpen = i;
-			}
+			DISPLAY_CBUTTON(m);
 			if (currentOpen == i)
 			{
 				ImGui::BulletText("Type: %s", m.type.c_str());
@@ -383,14 +345,61 @@ inline void Application::CurrentSelectedComponent()
 		m_Configuration.pCase = &vCase[m_UsedCase];
 	else
 		m_Configuration.pCase = 0;
+}
 
+void Application::UserConfiguration()
+{
+	static i32 currentOpen = -1;
 	ImGui::Begin("Selected Components");
 	int numOfComponents = 0;
 
 	if (m_Configuration.pMotherBoard)
 	{
 		numOfComponents++;
-		
+
+		//MotherBoardDataDisplay(*m_Configuration.pMotherBoard);
+	}
+	
+	if (m_Configuration.pCpu)
+	{
+		numOfComponents++;
+		//CPUDataDisplay(*m_Configuration.pCpu);
+	}
+
+	if (m_Configuration.pMemory)
+	{
+		numOfComponents++;
+		//MemoryDataDisplay(*m_Configuration.pMemory);
+	}
+
+	if (m_Configuration.pCpuCooler)
+	{
+		numOfComponents++;
+		//CPUCoolerDataDisplay(*m_Configuration.pCpuCooler);
+	}
+
+	if (m_Configuration.pStorage)
+	{
+		numOfComponents++;
+		//StorageDataDisplay(*m_Configuration.pStorage);
+	}
+
+	if (m_Configuration.pVideoCard)
+	{
+		numOfComponents++;
+		//VideoCardDataDisplay(*m_Configuration.pVideoCard);
+	}
+
+	if (m_Configuration.pPowerSupply)
+	{
+		numOfComponents++;
+		//PowerSupplyDataDisplay(*m_Configuration.pPowerSupply);
+	}
+
+	if (m_Configuration.pCase)
+	{
+		numOfComponents++;
+		//CaseDataDisplay(*m_Configuration.pCase);
 	}
 
 	ImGui::Text("Total number of compenents: %d", numOfComponents);
@@ -446,7 +455,8 @@ void Application::ImGUIFrame()
 	if (ImGui::Button("Video Card", size)) m_SelectedCompenent = cVideoCard;
 	ImGui::End();
 	if (m_SelectedCompenent)
-		CurrentSelectedComponent();
+		CurrentMenuSelection();
+	UserConfiguration();
 }
 
 void Application::Render()
