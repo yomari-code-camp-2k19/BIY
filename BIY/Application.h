@@ -292,8 +292,8 @@ inline void Application::CurrentMenuSelection()
 				bool used = (m_UsedMemory == i);
 				ImGui::Checkbox("Use", &used);
 				if (used) m_UsedMemory = i;  else {
-					if (m_UsedMotherBoard == i)
-						m_UsedMotherBoard = -1;
+					if (m_UsedMemory == i)
+						m_UsedMemory = -1;
 				}
 			}
 		}

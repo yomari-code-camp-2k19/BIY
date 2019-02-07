@@ -172,6 +172,14 @@
     <ClInclude Include="imgui\imstb_rectpack.h" />
     <ClInclude Include="imgui\imstb_textedit.h" />
     <ClInclude Include="imgui\imstb_truetype.h" />
+    <ClInclude Include="json\autolink.h" />
+    <ClInclude Include="json\config.h" />
+    <ClInclude Include="json\features.h" />
+    <ClInclude Include="json\forwards.h" />
+    <ClInclude Include="json\json.h" />
+    <ClInclude Include="json\reader.h" />
+    <ClInclude Include="json\value.h" />
+    <ClInclude Include="json\writer.h" />
     <ClInclude Include="math\Color.h" />
     <ClInclude Include="math\Math.h" />
     <ClInclude Include="math\Matrix4.h" />
@@ -180,6 +188,7 @@
     <ClInclude Include="resourceManager.h" />
     <ClInclude Include="Application.h" />
     <ClInclude Include="Components.h" />
+    <ClInclude Include="stb_image.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\fshader.frag" />
