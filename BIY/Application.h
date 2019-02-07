@@ -626,7 +626,7 @@ void Application::UserConfiguration()
 
 inline bool Application::IsCompatible(cpu & a, motherboard & b)
 {
-	//if (a.socket == b.socket && a.vendor == b.vendor) return true;
+	if (a.socket == b.socket && a.vendor == b.vendor) return true;
 	return false;
 }
 
@@ -688,7 +688,7 @@ inline bool Application::IsCompatible(motherboard & a, powerSupply & b)
 
 inline bool Application::IsCompatible(motherboard & a, casing & b)
 {
-	//if (a.volume > b.volume) return false;
+	if (a.volume > b.volume) return false;
 	return true;
 }
 

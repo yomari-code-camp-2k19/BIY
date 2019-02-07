@@ -22,7 +22,7 @@ struct motherboard {
 	float avgRate;
 	float price;
 	std::string vendor;
-	flaot volume;
+	float volume;
 };
 
 struct cpuCooler {
