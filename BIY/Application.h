@@ -124,7 +124,7 @@ inline void Application::CurrentSelectedComponent()
 				ImGui::BulletText("Ram Slot: %u", m.ramSlot);
 				ImGui::BulletText("Max Ram Suported: %u", m.maxRam);
 				ImGui::BulletText("Average Rate: %.2f", m.maxRam);
-				ImGui::BulletText("Average Price: %.2f", m.price);
+				ImGui::BulletText("Average Price: NPRs.%.2f", m.price * 114.72);
 				bool used = (m_UsedMotherBoard==i);
 				ImGui::Checkbox("Use", &used);
 				if (used) m_UsedMotherBoard = i;
@@ -150,7 +150,7 @@ inline void Application::CurrentSelectedComponent()
 				ImGui::BulletText("Cores: %u", m.core);
 				ImGui::BulletText("Power: %u", m.power);
 				ImGui::BulletText("Average Rate: %.2f", m.avgRate);
-				ImGui::BulletText("Average Price: %.2f", m.price);
+				ImGui::BulletText("Average Price: NPRs.%.2f", m.price * 114.72);
 				bool used = (m_UsedProcessor == i);
 				ImGui::Checkbox("Use", &used);
 				if (used) m_UsedProcessor = i;
@@ -178,7 +178,7 @@ inline void Application::CurrentSelectedComponent()
 				ImGui::BulletText("Mod X Each Mod: %u X %u", m.numModule, m.eachModule);
 				ImGui::BulletText("Size: %u", m.size);
 				ImGui::BulletText("Average Rating: %.2f", m.avgRating);
-				ImGui::BulletText("Average Price: %.2f", m.Price);
+				ImGui::BulletText("Average Price: NPRs.%.2f", m.Price * 114.72);
 				bool used = (m_UsedMemory == i);
 				ImGui::Checkbox("Use", &used);
 				if (used) m_UsedMemory = i;
@@ -204,7 +204,7 @@ inline void Application::CurrentSelectedComponent()
 				ImGui::BulletText("Max RPM: %u", m.maxRpm);
 				ImGui::BulletText("Noise Level: %u", m.noiseLevel);
 				ImGui::BulletText("Average Rating: %.2f", m.avgRate);
-				ImGui::BulletText("Average Price: %.2f", m.price);
+				ImGui::BulletText("Average Price: NPRs.%.2f", m.price * 114.72);
 				bool used = (m_UsedCooler == i);
 				ImGui::Checkbox("Use", &used);
 				if (used) m_UsedCooler = i;
@@ -226,13 +226,13 @@ inline void Application::CurrentSelectedComponent()
 			}
 			if (currentOpen == i)
 			{
-				ImGui::BulletText("Series: %s", m.series);
-				ImGui::BulletText("Form: %s", m.form);
-				ImGui::BulletText("Type: %s", m.type);
-				ImGui::BulletText("Capacity: %s", m.capacity);
-				ImGui::BulletText("Cache: %.2f", m.cache);
+				ImGui::BulletText("Series: %s", m.series.c_str());
+				ImGui::BulletText("Form: %s", m.form.c_str());
+				ImGui::BulletText("Type: %s", m.type.c_str());
+				ImGui::BulletText("Capacity: %s", m.capacity.c_str());
+				ImGui::BulletText("Cache: %.2f MB", m.cache);
 				ImGui::BulletText("Average Rating: %.2f", m.avgRate);
-				ImGui::BulletText("Average Price: %.2f", m.price);
+				ImGui::BulletText("Average Price: NPRs.%.2f", m.price * 114.72);
 				bool used = (m_UsedStorage == i);
 				ImGui::Checkbox("Use", &used);
 				if (used) m_UsedStorage = i;
@@ -254,12 +254,12 @@ inline void Application::CurrentSelectedComponent()
 			}
 			if (currentOpen == i)
 			{
-				ImGui::BulletText("Series: %.2f", m.series);
-				ImGui::BulletText("Chipset: %u", m.chipset);
-				ImGui::BulletText("Memory: %u", m.memory);
-				ImGui::BulletText("Clk Rate: %.2f", m.ClkCore);
+				ImGui::BulletText("Series: %s", m.series.c_str());
+				ImGui::BulletText("Chipset: %s", m.chipset.c_str());
+				ImGui::BulletText("Memory: %u GB", m.memory);
+				ImGui::BulletText("Clk Rate: %.2f GHz", m.ClkCore);
 				ImGui::BulletText("Average Rate: %.2f", m.avgRate);
-				ImGui::BulletText("Average Price: %.2f", m.Price);
+				ImGui::BulletText("Average Price: NPRs.%.2f", m.Price * 114.72);
 				bool used = (m_UsedVideoCard == i);
 				ImGui::Checkbox("Use", &used);
 				if (used) m_UsedVideoCard = i;
@@ -281,11 +281,13 @@ inline void Application::CurrentSelectedComponent()
 			}
 			if (currentOpen == i)
 			{
-				//ImGui::BulletText("Speed: %.2f", m.speed);
-				//ImGui::BulletText("Cores: %u", m.core);
-				//ImGui::BulletText("Power: %u", m.power);
-				//ImGui::BulletText("Average Rate: %.2f", m.avgRate);
-				//ImGui::BulletText("Average Price: %.2f", m.price);
+				ImGui::BulletText("Series: %s", m.series.c_str());
+				ImGui::BulletText("Form: %s", m.form.c_str());
+				ImGui::BulletText("Efficiency: %s", m.efficiency.c_str());
+				ImGui::BulletText("Power: %i W", m.power);
+				ImGui::BulletText("Modular: %s", m.modular.c_str());
+				ImGui::BulletText("Average Rating: %.2f", m.avgRate);
+				ImGui::BulletText("Average Price: NPRs.%.2f", m.price * 114.72);
 				bool used = (m_UsedPowerSupply == i);
 				ImGui::Checkbox("Use", &used);
 				if (used) m_UsedPowerSupply = i;
@@ -307,11 +309,8 @@ inline void Application::CurrentSelectedComponent()
 			}
 			if (currentOpen == i)
 			{
-				//ImGui::BulletText("Speed: %.2f", m.speed);
-				//ImGui::BulletText("Cores: %u", m.core);
-				//ImGui::BulletText("Power: %u", m.power);
-				//ImGui::BulletText("Average Rate: %.2f", m.avgRate);
-				//ImGui::BulletText("Average Price: %.2f", m.price);
+				ImGui::BulletText("Type: %s", m.type.c_str());
+				ImGui::BulletText("Average Price: NPRs.%.2f", m.price * 114.72);
 				bool used = (m_UsedCase == i);
 				ImGui::Checkbox("Use", &used);
 				if (used) m_UsedCase = i;
