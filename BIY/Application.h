@@ -58,6 +58,9 @@ private:
 	f32 m_UserPrice;
 	f32 m_LeftPrice;
 
+	bool m_CompatibilityStatus;
+	std::string m_CompabilityMsg;
+
 	static const char* s_ComponentNames[pc_components::cTotal - 1];
 
 	void SetComponents();
@@ -248,6 +251,9 @@ void Application::SetComponents()
 	m_UsedVideoCard = -1;
 	m_UsedPowerSupply = -1;
 	m_UsedCase = -1;
+
+	m_CompatibilityStatus = true;
+	m_CompabilityMsg = "Unknown Issue";
 
 #define SORT_ORDER() [](auto& a, auto& b) { return a.price < b.price; }
 	std::sort(vMotherboard.begin(), vMotherboard.end(), SORT_ORDER());
@@ -490,7 +496,7 @@ void Application::UserConfiguration()
 
 	int numOfComponents = 0;
 	f32 totalPrice = 0.0f;
-	ImVec4 color(1.0f, 0.0f, 0.0f, 1.0f);
+	ImVec4 color(0.0f, 0.0f, 1.0f, 1.0f);
 
 	if (m_Configuration.pMotherBoard)
 	{
@@ -603,6 +609,18 @@ void Application::UserConfiguration()
 	ImGui::TextColored(color, "Total number of compenents: %d", numOfComponents);
 	ImGui::TextColored(color, "Total Price: %.2f", totalPrice * 114.720f);
 	ImGui::TextColored(color, "Left Price: %.2f", m_LeftPrice);
+
+	ImGui::TextColored(color, "Compability Status: ");
+	ImGui::SameLine();
+	if (m_CompatibilityStatus)
+	{
+		ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "OK");
+	}
+	else
+	{
+		ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "NO (%s)", m_CompabilityMsg.c_str());
+	}
+
 	ImGui::End();
 }
 
