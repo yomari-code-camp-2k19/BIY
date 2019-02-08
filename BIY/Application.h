@@ -202,8 +202,8 @@ inline void Application::CPUCoolerDataDisplay(cpuCooler & m)
 
 void Application::SetComponents()
 {
-	vCase.push_back(casing{ "Thermaltake Core G3","ATX Mid Tower",69.49f });
-	vCase.push_back(casing{ "Lian-Li PC-O10 WX","ATX Mid Tower",249.99f });
+	vCase.push_back(casing{ "Thermaltake Core G3","ATX Mid Tower",69.49f,250.0f });
+	vCase.push_back(casing{ "Lian-Li PC-O10 WX","ATX Mid Tower",249.99f,250.0f });
 
 	vPowerSupply.push_back(powerSupply{ "EVGA SuperNOVA 750","SuperNOVA G3","ATX","80+ Gold",750,"Full",4.5f,99.89f });
 	vPowerSupply.push_back(powerSupply{ "Corsair CX550M","CXM","ATX","80+ Bronze",550,"Semi",4.5f,33.99f });
@@ -225,13 +225,13 @@ void Application::SetComponents()
 	vCpuCooler.push_back(cpuCooler{ "Cooler Master Hyper T2",0,2800,35,4,16.89f });
 	vCpuCooler.push_back(cpuCooler{ "be quiet! Dark Rock 4",0,1400,35,4.5f,68.99f });
 
-	vCpu.push_back(cpu{ "Intel Core i7 - 8700K",3.7f,6,95,4.5f,369.99f });
-	vCpu.push_back(cpu{ "Intel Core i9 - 9900K",3.6f,8,95,4.5f,529.99f });
-	vCpu.push_back(cpu{ "Intel Core i5 - 9600K",3.7f,6,95,4.5f,259.99f });
+	vCpu.push_back(cpu{ "Intel Core i7 - 8700K",3.7f,6,95,4.5f,369.99f,"LGA1151","Intel" });
+	vCpu.push_back(cpu{ "Intel Core i9 - 9900K",3.6f,8,95,4.5f,529.99f,"LGA1411","Intel" });
+	vCpu.push_back(cpu{ "Intel Core i5 - 9600K",3.7f,6,95,4.5f,259.99f,"LGA1151","Intel"});
 
-	vMotherboard.push_back(motherboard{ "MSI Z370-A PRO","LGA1151","ATX",4,64,4,109.89f });
-	vMotherboard.push_back(motherboard{ "Asus PRIME Z390-A","LGA1151","ATX",4,64,0,183.00f });
-	vMotherboard.push_back(motherboard{ "Gigabyte H310M A","LGA1151","Micro ATX",2,32,5,55.99f });
+	vMotherboard.push_back(motherboard{ "MSI Z370-A PRO","LGA1151","ATX",4,64,4,109.89f,"Intel",200.f });
+	vMotherboard.push_back(motherboard{ "Asus PRIME Z390-A","LGA1151","ATX",4,64,0,183.00f,"AMD",200.0f });
+	vMotherboard.push_back(motherboard{ "Gigabyte H310M A","LGA1151","Micro ATX",2,32,5,55.99f,"Intel",200.0f });
 
 	m_Configuration.pCase = 0;
 	m_Configuration.pCpu = 0;
@@ -667,7 +667,7 @@ inline bool Application::IsCompatible(motherboard & a, cpuCooler & b)
 
 inline bool Application::IsCompatible(motherboard & a, memory & b)
 {
-	if (a.maxRam < b.size) return true;
+	if (a.maxRam > b.size) return true;
 	return false;
 }
 
