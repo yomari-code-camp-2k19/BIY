@@ -778,6 +778,10 @@ void Application::Init(Renderer2D* renderer)
 	ResourceManager::LoadTexture("res/Processor.png", GL_TRUE, "processor");
 	ResourceManager::LoadTexture("res/Storage.png", GL_TRUE, "storage");
 	ResourceManager::LoadTexture("res/VideoCard.png", GL_TRUE, "videocard");
+	
+	ResourceManager::LoadTexture("res/arr/processor.png", GL_TRUE, "left");
+	ResourceManager::LoadTexture("res/arr/video card.png", GL_TRUE, "right");
+	ResourceManager::LoadTexture("res/arr/powersupply.png", GL_TRUE, "up");
 	// Set render-specific controls
 	m_Renderer = renderer;
 
@@ -793,6 +797,7 @@ void Application::Update()
 	m_CompatibilityStatus = true;
 	if (m_Configuration.pCpu && m_Configuration.pMotherBoard)
 	{
+		m_Renderer->Draw(ResourceManager::GetTexture("left"), v2{ 500.0f, 330.0f }, v2{ 95.0f, 30.0f }, 1.0f*3.14f);
 		if (!IsCompatible(*m_Configuration.pCpu, *m_Configuration.pMotherBoard))
 		{
 			m_CompabilityMsg = "CPU and Motherboard not compatible";
@@ -865,6 +870,7 @@ void Application::Update()
 
 	if (m_Configuration.pMotherBoard && m_Configuration.pMemory)
 	{
+		m_Renderer->Draw(ResourceManager::GetTexture("right"), v2{ 395.0f, 480.0f }, v2{ 100.0f, 120.0f });
 		if (!IsCompatible(*m_Configuration.pMotherBoard, *m_Configuration.pMemory))
 		{
 			m_CompabilityMsg = "Motherboard and Memory not compatible";
@@ -874,6 +880,7 @@ void Application::Update()
 
 	if (m_Configuration.pMotherBoard && m_Configuration.pStorage)
 	{
+		m_Renderer->Draw(ResourceManager::GetTexture("left"), v2{ 160.0f, 150.0f }, v2{ 30.0f, 25.0f }, 0.785398f); // storage
 		if (!IsCompatible(*m_Configuration.pMotherBoard, *m_Configuration.pStorage))
 		{
 			m_CompabilityMsg = "Motherboard and Storage not compatible";
@@ -883,6 +890,7 @@ void Application::Update()
 
 	if (m_Configuration.pMotherBoard && m_Configuration.pVideoCard)
 	{
+		m_Renderer->Draw(ResourceManager::GetTexture("left"), v2{ 100.0f, 325.0f }, v2{ 175.0f, 15.0f }); // vc
 		if (!IsCompatible(*m_Configuration.pMotherBoard, *m_Configuration.pVideoCard))
 		{
 			m_CompabilityMsg = "Motherboard and Video card not compatible";
@@ -892,6 +900,7 @@ void Application::Update()
 
 	if (m_Configuration.pMotherBoard && m_Configuration.pPowerSupply)
 	{
+		m_Renderer->Draw(ResourceManager::GetTexture("left"), v2{ 300.0f, 540.0f }, v2{ 50.0f, 10.0f }, -3.14f / 2.0f);
 		if (!IsCompatible(*m_Configuration.pMotherBoard, *m_Configuration.pPowerSupply))
 		{
 			m_CompabilityMsg = "Motherboard and Powersupply not compatible";
@@ -1093,7 +1102,7 @@ void Application::Render()
 		v2 dimension;
 		dimension.x = 130.0f;
 		dimension.y = 130.0f;
-		m_Renderer->Draw(tex, v2{ 500.0f, 550.0f }, dimension);
+		m_Renderer->Draw(tex, v2{ 500.0f, 525.0f }, dimension);
 	}
 
 	if (m_Configuration.pCpuCooler)

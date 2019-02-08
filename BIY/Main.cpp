@@ -77,7 +77,16 @@ int main(int, char**)
 	{
 		glfwPollEvents();
 
-		app.Update();
+		if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_1) == GLFW_RELEASE)
+		{
+			int w, h;
+			double mx, my;
+			glfwGetCursorPos(window, &mx, &my);
+			glfwGetFramebufferSize(window, &w, &h);
+			mx = mx / w * 1280.0;
+			my = my / h * 720.0;
+			printf("x= %.2f, y=%.2f\n", mx, my);
+		}
 
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
@@ -95,6 +104,7 @@ int main(int, char**)
 		a3GL(glClearColor(clear_color.x, clear_color.y, clear_color.z, 1.0f));
 		a3GL(glClear(GL_COLOR_BUFFER_BIT));
 		
+		app.Update();
 		app.Render();
 
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
